@@ -8,3 +8,5 @@ This is my first self-project in GitHub
 ````
 $ git config --global http.proxy "代理的地址:端口"
 ````
+
+That is all.
