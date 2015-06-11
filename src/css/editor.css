@@ -1,2 +1,46 @@
-@charset "utf-8";
 /* Hello World Editor style sheet */
+/* functional less */
+/* stylesheet */
+.h-outer {
+  background-color: #e3e3e3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.h-outer .h-textarea {
+  position: absolute;
+  right: 40%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background-color: #e1f3d3;
+}
+.h-outer .h-textarea .h-title-panel {
+  padding: 10px 20px;
+  height: 80px;
+  background-color: #e1f3d3;
+  box-sizing: border-box;
+}
+.h-outer .h-textarea .h-title-panel .h-title {
+  height: 60px;
+  width: 100%;
+  line-height: 60px;
+  font-size: 32px;
+  background-color: #e1f3d3;
+  border: none;
+}
+.h-outer .h-textarea .h-tool-panel {
+  border-bottom: 1px solid #414141;
+}
+.h-outer .h-preview {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  left: 60%;
+  background-color: #ffffff;
+  border-left: 1px solid #414141;
+}

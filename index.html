@@ -2,11 +2,34 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;" />
 <title>HelloWorld</title>
+<link rel="stylesheet" type="text/css" href="src/css/global.css">
+<link rel="stylesheet" type="text/css" href="src/css/editor.css">
 <script type="text/javascript" src="src/js/jquery.js"></script>
 <script type="text/javascript" src="src/js/markdown.js"></script>
+<style type="text/css">
+.example{
+    position:absolute;
+    border:1px solid red;
+    top:0;left:0;right:0;bottom:0;
+}
+</style>
 </head>
 
 <body>
+    <div class="example">
+        <div class="h-outer">
+            <div class="h-textarea">
+                <div class="h-title-panel">
+                    <input type="text" class="h-title" placeholder="在这里输入标题">
+                </div>
+                <div class="h-tool-panel"></div>
+                <div class="h-textarea-panel"></div>
+            </div>
+            <div class="h-preview"></div>
+        </div>
+    </div>
 </body>
 </html>

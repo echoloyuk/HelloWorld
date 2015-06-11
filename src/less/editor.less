@@ -1,2 +1,58 @@
 /* Hello World Editor style sheet */
-@charset "utf-8";
+@outer-bg:#e3e3e3; //编辑器背景颜色
+@textarea-bg:#e1f3d3; //文本编辑的背景颜色
+@title-bg:#e1f3d3; //文本编辑器标题背景颜色
+@preview-bg:#fff; //预览背景颜色
+@p-border:#414141; //预览与编辑器之间的边线颜色
+
+@import "function.less"; //工具样式
+
+/* stylesheet */
+.h-outer{
+    background-color:@outer-bg;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    .h-textarea{
+        position:absolute;
+        right:40%;
+        top:0;
+        bottom:0;
+        left:0;
+        z-index:100;
+        background-color:@textarea-bg;
+
+        .h-title-panel{
+            padding:10px 20px;
+            height:80px;
+            background-color:@title-bg;
+            box-sizing:border-box;
+
+            .h-title{
+                height:60px;
+                width:100%;
+                line-height:60px;
+                font-size:32px;
+                background-color: @title-bg;
+                border:none;
+            }
+
+        }
+        .h-tool-panel{
+            border-bottom:1px solid @p-border;
+        }
+
+    }
+    .h-preview{
+        position:absolute;
+        right:0;
+        top:0;
+        bottom:0;
+        left:60%;
+        background-color:@preview-bg;
+        border-left:1px solid @p-border;
+    }
+}
