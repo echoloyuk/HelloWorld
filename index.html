@@ -7,6 +7,7 @@
 <title>HelloWorld</title>
 <link rel="stylesheet" type="text/css" href="src/css/global.css">
 <link rel="stylesheet" type="text/css" href="src/css/editor.css">
+<link rel="stylesheet" type="text/css" href="src/css/content.css">
 <script type="text/javascript" src="src/js/jquery.js"></script>
 <script type="text/javascript" src="src/js/markdown.js"></script>
 <style type="text/css">
@@ -23,13 +24,47 @@
         <div class="h-outer">
             <div class="h-textarea">
                 <div class="h-title-panel">
-                    <input type="text" class="h-title" placeholder="在这里输入标题">
+                    <input type="text" id="hTitle" class="h-title" placeholder="在这里输入标题">
                 </div>
-                <div class="h-tool-panel"></div>
-                <div class="h-textarea-panel"></div>
+                <div class="h-tool-panel">
+                    <div class="h-tool-item h-tool-pic" title="图片">图片</div>
+                    <div class="h-tool-item h-tool-pic" title="链接">链接</div>
+                </div>
+                <div class="h-content-panel">
+                    <textarea class="h-content" id="hContent" placeholder="在这里输入正文"></textarea>
+                </div>
             </div>
-            <div class="h-preview"></div>
+            <div class="h-preview" id="hPreview">
+                <div class="h-text-content-title">这是一个标题</div>
+                <div class="h-text-content">
+                    <h2>标题1</h2>
+                    <p>正文。。。</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+<script type="text/javascript">
+$(function (){
+    var inputDealer = function (){
+        var $title = $('#hTitle'),
+            $content = $('#hContent');
+        var $pre = $('#hPreview');
+        var str = '';
+
+        $pre.html('');
+        str += '<div class="h-text-content-title">' + ($title.val() || '无标题') + '</div>';
+        str += '<div class="h-text-content">';
+        str += markdown.toHTML($content.val());
+        str += '</div>';
+
+        $pre.html(str);
+    };
+
+    $('#hContent').on('input', function (){
+        inputDealer();
+    });
+
+});
+</script>
 </html>

@@ -2,6 +2,8 @@
 @outer-bg:#e3e3e3; //编辑器背景颜色
 @textarea-bg:#e1f3d3; //文本编辑的背景颜色
 @title-bg:#e1f3d3; //文本编辑器标题背景颜色
+@tool-bg:#ccc; //文本编辑器工具栏背景颜色
+@content-bg:#eee; //正文文本编辑器的背景颜色
 @preview-bg:#fff; //预览背景颜色
 @p-border:#414141; //预览与编辑器之间的边线颜色
 
@@ -43,6 +45,41 @@
         }
         .h-tool-panel{
             border-bottom:1px solid @p-border;
+            height:30px;
+            background-color:@tool-bg;
+            padding:0 20px;
+            
+            .h-tool-item{
+                float:left;
+                height:30px;
+                width:30px;
+                cursor:pointer;
+                border:1px solid red;
+                box-sizing:border-box;
+                
+            }
+        }
+
+        .h-content-panel{
+            position:absolute;
+            top:110px;
+            left:0px;
+            right:0px;
+            bottom:0px;
+            background-color:@content-bg;
+            padding:10px 20px;
+
+            .h-content{
+                border:none;
+                width:100%;
+                height:100%;
+                background-color:@content-bg;
+                font-family:'lucida grande',Helvetica,Tahoma,Verdana,Microsoft YaHei,Arial,simsun,sans-serif;
+                font-size:1.4em;
+                line-height:1.2em;
+                outline:none;
+                resize:none;
+            }
         }
 
     }
@@ -54,5 +91,18 @@
         left:60%;
         background-color:@preview-bg;
         border-left:1px solid @p-border;
+        padding:20px;
+        overflow:auto;
+
+        .h-text-content-title{
+            font-size:3em;
+            font-weight:bolder;
+            line-height:1.2em;
+        }
+        .h-text-content{
+            border-top:1px solid #666;
+            margin-top:20px;
+            padding:20px 0;
+        }
     }
 }
