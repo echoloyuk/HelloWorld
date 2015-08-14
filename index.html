@@ -63,6 +63,60 @@ $(function (){
         inputDealer();
     });
 
+    //按tab键屏蔽默认事件，未来加入自动空格
+    $('#hContent').on('keydown', function (e){
+        var key = e.keyCode;
+        if (key === 9){
+            e.preventDefault();
+        }
+    });
+
+    $('#hContent').on('click', function (){
+        var fun = function (){
+            var $hContent = $('#hContent');
+            var hContent = $hContent.get(0);
+            var content = $hContent.val();
+            if ('selectionStart' in hContent){
+                var s = hContent.selectionStart; //选中的字符起始位置。
+                var e = hContent.selectionEnd; //选中的字符串终止位置。
+            } else {
+                hContent.focus();
+                var sel = document.selection.createRange();
+                var range = document.selection.createRange().text.length; //选中了多少个字的数字
+                var selStr = document.selection.createRange().text; //选中的文字
+                sel.moveStart('character', -hContent.value.length); //将光标从当前选中的位置，向前选所有的文字
+                var pos = sel.text.length - range; //选中结束的位置向前的字数 - 选中的字数 = 光标的起始位置。
+                //上面代码有bug，向前选择可能会选择到其他非textarea的文字，所以导致文字位置计算错误
+
+                console.log(sel.text + '!' + range);
+                //console.log(content.substring(0, pos));
+                //console.log(sel.boundingLeft);
+            }
+            
+            
+            //console.log(content.substring(s, e))
+        };
+        fun();
+    });
+
+    //处理缩进相关
+    $('#hContent').on('keydown', function (e){
+        var $c = $('#hContent');
+        var c = $c.get(0);
+        var content = $c.val();
+        var keyCode = e.keyCode;
+        if (keyCode === 9){
+            e.preventDefault();
+
+            var start = c.selectionStart;
+            var end = c.selectionEnd;
+            if (start !== end){
+                var str = content.substring(start, end);
+                str = str.replace('\n', '\n    '));
+                
+            }
+        }
+    });
 });
 </script>
 </html>
