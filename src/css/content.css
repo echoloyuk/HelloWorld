@@ -43,13 +43,13 @@
 }
 .h-text-content strong,
 .h-text-content b {
-  font-weight: 500;
+  font-weight: bolder;
   color: #555;
 }
 .h-text-content em,
 .h-text-content i {
   font-style: italic;
-  color: #222;
+  color: #766732;
 }
 .h-text-content img {
   max-width: 98%;
