@@ -1,4 +1,4 @@
-# 一级标题
+﻿# 一级标题
 ## 二级标题
 ### 三级标题
 #### 四级标题 
@@ -30,15 +30,47 @@ Gao Huaiyou, deputy director of Tianjin's work safety watchdog, cited major disc
 * c 
 * d 
 
-this is a 
+这是一个示例代码
 
-    var a = function (){
-    
-    }
+$(function (){
+    var inputDealer = function (){
+        var $title = $('#hTitle'),
+            $content = $('#hContent');
+        var $pre = $('#hPreview');
+        var str = '';
 
-`var a = 5;`
-`
-var fun = function (){
-var a  = 5;
-}
-`
+        $pre.html('');
+        str += '<div class="h-text-content-title">' + ($title.val() || '无标题') + '</div>';
+        str += '<div class="h-text-content">';
+        str += markdown.toHTML($content.val());
+        str += '</div>';
+
+        $pre.html(str);
+    };
+
+    $('#hContent').on('input', function (){
+        inputDealer();
+    });
+    $('#hTitle').on('input', function (){
+        inputDealer();
+    });
+});
+
+这是一个table
+<table>
+    <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+    </tr>
+</table>
+

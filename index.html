@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;" />
-<title>HelloWorld</title>
+<title>HelloWorld prototype</title>
 <link rel="stylesheet" type="text/css" href="src/css/global.css">
 <link rel="stylesheet" type="text/css" href="src/css/editor.css">
 <link rel="stylesheet" type="text/css" href="src/css/content.css">
 <script type="text/javascript" src="src/js/jquery.js"></script>
 <script type="text/javascript" src="src/js/markdown.js"></script>
+<script type="text/javascript" src="src/js/marked.js"></script>
 <style type="text/css">
 .example{
     position:absolute;
@@ -53,7 +54,7 @@ $(function (){
         $pre.html('');
         str += '<div class="h-text-content-title">' + ($title.val() || '无标题') + '</div>';
         str += '<div class="h-text-content">';
-        str += markdown.toHTML($content.val());
+        str += marked($content.val());
         str += '</div>';
 
         $pre.html(str);
@@ -62,14 +63,10 @@ $(function (){
     $('#hContent').on('input', function (){
         inputDealer();
     });
-
-    //按tab键屏蔽默认事件，未来加入自动空格
-    $('#hContent').on('keydown', function (e){
-        var key = e.keyCode;
-        if (key === 9){
-            e.preventDefault();
-        }
+    $('#hTitle').on('input', function (){
+        inputDealer();
     });
+
 
     $('#hContent').on('click', function (){
         var fun = function (){
@@ -88,7 +85,6 @@ $(function (){
                 var pos = sel.text.length - range; //选中结束的位置向前的字数 - 选中的字数 = 光标的起始位置。
                 //上面代码有bug，向前选择可能会选择到其他非textarea的文字，所以导致文字位置计算错误
 
-                console.log(sel.text + '!' + range);
                 //console.log(content.substring(0, pos));
                 //console.log(sel.boundingLeft);
             }
@@ -99,24 +95,97 @@ $(function (){
         fun();
     });
 
+    //用于处理shift+tab键的组合件事件
+    $('#hContent').on('keydown', function (e){
+        var key = e.keyCode;
+        if (key === 16){
+            window.isShift = window.isShift || true;
+        }
+    }).on('keyup', function (e){
+        var key = e.keyCode;
+        if (key === 16){
+            window.isShift = false;
+        }
+    });
     //处理缩进相关
     $('#hContent').on('keydown', function (e){
         var $c = $('#hContent');
         var c = $c.get(0);
         var content = $c.val();
         var keyCode = e.keyCode;
-        if (keyCode === 9){
+
+        if (keyCode === 9 && !window.isShift){
             e.preventDefault();
 
             var start = c.selectionStart;
             var end = c.selectionEnd;
             if (start !== end){
-                var str = content.substring(start, end);
-                //str = str.replace('\n', '\n    '));
-                
+
+                //将所有的内容向后缩进
+                var firstLineOfRange = content.lastIndexOf('\n', start);
+                if (firstLineOfRange < 0){
+                    firstLineOfRange = 0;
+                } else {
+                    firstLineOfRange += 1;
+                }
+                var rangeStr = content.substring(firstLineOfRange, end);
+                rangeStr = rangeStr.replace(/\n/g, '\n    ');
+                rangeStr = '    ' + rangeStr;
+                console.log('|' + rangeStr);
+                var strArr = [];
+                strArr.push(content.slice(0, firstLineOfRange));
+                strArr.push(rangeStr);
+                var newEnd = content.slice(end, content.length).length;
+                strArr.push(content.slice(end, content.length));
+                var finalStr = strArr.join('');
+                console.log(finalStr);
+                $c.val(finalStr);
+                c.selectionStart = firstLineOfRange;
+                c.selectionEnd = $c.val().length - newEnd; //重新计算位置
+                //---------------------
+            } else {
+
+                //单个字的缩进
+                var strArr = [];
+                strArr.push(content.substring(0, start));
+                strArr.push('    ');
+                strArr.push(content.substring(start, content.length));
+                var finalStr = strArr.join('');
+                $c.val(finalStr);
+                c.selectionStart = start + 4;
+                c.selectionEnd = start + 4;
             }
+            inputDealer();
+        } else if (keyCode === 9 && window.isShift){
+            e.preventDefault();
+
+            var start = c.selectionStart;
+            var end = c.selectionEnd;
+
+            if (start !== end){
+
+                //将所有内容向前缩进
+                var firstLineOfRange = content.lastIndexOf('\n', start);
+                if (firstLineOfRange < 1){
+                    firstLineOfRange = 0;
+                }
+                var rangeStr = content.substring(firstLineOfRange, end);
+                rangeStr = rangeStr.replace(/\n    /g, '\n');
+                rangeStr = rangeStr.replace(/^    /, ''); //去掉开头的空格
+                var strArr = [];
+                strArr.push(content.slice(0, firstLineOfRange));
+                strArr.push(rangeStr);
+                var newEnd = content.slice(end, content.length).length;
+                strArr.push(content.slice(end, content.length));
+                finalStr = strArr.join('');
+                $c.val(finalStr);
+                c.selectionStart = firstLineOfRange
+                c.selectionEnd = $c.val().length - newEnd;
+            }
+            inputDealer();
         }
     });
+    inputDealer();
 });
 </script>
 </html>
