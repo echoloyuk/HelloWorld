@@ -9,8 +9,8 @@
 <link rel="stylesheet" type="text/css" href="src/css/editor.css">
 <link rel="stylesheet" type="text/css" href="src/css/content.css">
 <script type="text/javascript" src="src/js/jquery.js"></script>
-<script type="text/javascript" src="src/js/markdown.js"></script>
 <script type="text/javascript" src="src/js/marked.js"></script>
+<script type="text/javascript" src="src/js/jquery.form.js"></script>
 <style type="text/css">
 .example{
     position:absolute;
@@ -20,9 +20,9 @@
 </style>
 </head>
 
-<body>
+<body style="-moz-filter:blur(3px);">
     <div class="example">
-        <div class="h-outer">
+        <div class="h-outer" id="helloWorld">
             <div class="h-textarea">
                 <div class="h-title-panel">
                     <input type="text" id="hTitle" class="h-title" placeholder="在这里输入标题">
@@ -41,6 +41,27 @@
                 </div>
             </div>
         </div>
+        <div class="h-img-upload-dialog" id="upLoadDialog">
+            <div class="h-file-header">
+                <span>上传图片</span>
+                <div class="h-file-header-close" id="closeImgDialog">×</div>
+            </div>
+            <div class="h-file-panel">
+                <form id="imgUploadForm" enctype="multipart/form-data" method="post">
+                    <input type="file" class="h-file-upload">
+                </form>
+            </div>
+            <div class="h-file-info">
+                <span>上传限制：10M，类型：png, jpg, gif</span>
+            </div>
+            <div class="h-file-percent h-file-percent-outer">
+                <div class="h-file-percent-inner"></div>
+            </div>
+            <div class="h-file-upload-btn">
+                <div class="upload-btn" id="imgUploadBtn">上传</div>
+            </div>
+        </div>
+        <div class="h-mask" id="mask"></div>
     </div>
 </body>
 <script type="text/javascript">
@@ -67,34 +88,6 @@ $(function (){
         inputDealer();
     });
 
-
-    $('#hContent').on('click', function (){
-        var fun = function (){
-            var $hContent = $('#hContent');
-            var hContent = $hContent.get(0);
-            var content = $hContent.val();
-            if ('selectionStart' in hContent){
-                var s = hContent.selectionStart; //选中的字符起始位置。
-                var e = hContent.selectionEnd; //选中的字符串终止位置。
-            } else {
-                hContent.focus();
-                var sel = document.selection.createRange();
-                var range = document.selection.createRange().text.length; //选中了多少个字的数字
-                var selStr = document.selection.createRange().text; //选中的文字
-                sel.moveStart('character', -hContent.value.length); //将光标从当前选中的位置，向前选所有的文字
-                var pos = sel.text.length - range; //选中结束的位置向前的字数 - 选中的字数 = 光标的起始位置。
-                //上面代码有bug，向前选择可能会选择到其他非textarea的文字，所以导致文字位置计算错误
-
-                //console.log(content.substring(0, pos));
-                //console.log(sel.boundingLeft);
-            }
-            
-            
-            //console.log(content.substring(s, e))
-        };
-        fun();
-    });
-
     //用于处理shift+tab键的组合件事件
     $('#hContent').on('keydown', function (e){
         var key = e.keyCode;
@@ -114,7 +107,7 @@ $(function (){
         var content = $c.val();
         var keyCode = e.keyCode;
 
-        if (keyCode === 9 && !window.isShift){
+        if (keyCode === 9 && !window.isShift){ //按下tab键进行缩进
             e.preventDefault();
 
             var start = c.selectionStart;
@@ -131,14 +124,12 @@ $(function (){
                 var rangeStr = content.substring(firstLineOfRange, end);
                 rangeStr = rangeStr.replace(/\n/g, '\n    ');
                 rangeStr = '    ' + rangeStr;
-                console.log('|' + rangeStr);
                 var strArr = [];
                 strArr.push(content.slice(0, firstLineOfRange));
                 strArr.push(rangeStr);
                 var newEnd = content.slice(end, content.length).length;
                 strArr.push(content.slice(end, content.length));
                 var finalStr = strArr.join('');
-                console.log(finalStr);
                 $c.val(finalStr);
                 c.selectionStart = firstLineOfRange;
                 c.selectionEnd = $c.val().length - newEnd; //重新计算位置
@@ -156,7 +147,7 @@ $(function (){
                 c.selectionEnd = start + 4;
             }
             inputDealer();
-        } else if (keyCode === 9 && window.isShift){
+        } else if (keyCode === 9 && window.isShift){ //按下shift+tab键进行反缩进
             e.preventDefault();
 
             var start = c.selectionStart;
@@ -185,6 +176,49 @@ $(function (){
             inputDealer();
         }
     });
+
+    //处理图片等
+    $('#hContent').on('keydown', function (e){
+        var $c = $('#hContent');
+        var c = $c.get(0);
+        var content = $c.val();
+        var keyCode = e.keyCode;
+        var start = c.selectionStart;
+        var end = c.selectionEnd;
+
+        //弹出窗口
+        var openImgUpload = function (start){
+            var $outer = $('#helloWorld');
+            var $mask = $('#mask');
+            var $dialog = $('#upLoadDialog');
+            var $close = $('#closeImgDialog', $dialog);
+            $outer.addClass('h-masked');
+            $mask.show();
+            $dialog.show();
+            $close.off('click').on('click', function (){
+                closeImgUpload();
+            });
+
+        }
+
+        //关闭窗口
+        var closeImgUpload = function (start){
+            var $outer = $('#helloWorld');
+            var $mask = $('#mask');
+            var $dialog = $('#upLoadDialog');
+            var $close = $('#closeImgDialog', $dialog);
+            $outer.removeClass('h-masked');
+            $mask.hide();
+            $dialog.hide();
+        }
+
+        if (start === end && keyCode === 219 && content[start - 1] === '!'){ //![时出现图片插入，图片的特征是![替代文字](链接)
+            console.log('弹出上传图片的窗口');
+            openImgUpload();
+        }
+    });
+
+
     inputDealer();
 });
 </script>

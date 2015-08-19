@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>upload prototype</title>
 <script type="text/javascript" src="../src/js/jquery.js"></script>
+<script type="text/javascript" src="../src/js/jquery.form.js"></script>
 <script>
 $(function (){
     $('#upload').on('change', function (e){
@@ -14,8 +15,13 @@ $(function (){
         console.log('name:' + name + ' size' + size + 'B type:' + type);
     });
     /**/
-    var onUp = function (){
-
+    var onUp = function (e){
+        if (e.lengthComputable){
+            var percent = Math.round(e.loaded * 100 / e.total);
+            console.log(percent);
+        } else {
+            console.log('can\'t compute');
+        }
     };
     var onComp = function (e){
         console.log(e.target.responseText);
@@ -27,7 +33,35 @@ $(function (){
 
     };
     $('#btn').on('click', function (){
-        /**/
+        var formData = new FormData($('#form1').get(0));
+        $('#form1').ajaxSubmit({
+            url: 'upload.php',
+            type: 'POST',
+            xhr: function (){
+                var xhr = $.ajaxSettings.xhr();
+                xhr.upload.addEventListener('progress', onUp);
+                xhr.addEventListener('load', onComp);
+                xhr.addEventListener('event', onErr);
+                xhr.addEventListener('abort', onAbt);
+                return xhr;
+            },
+            processData:false
+        });
+        /*$.ajax({
+            url: 'upload.php',
+            type: 'POST',
+            data: formData,
+            xhr: function (){
+                var xhr = $.ajaxSettings.xhr();
+                xhr.upload.addEventListener('progress', onUp);
+                xhr.addEventListener('load', onComp);
+                xhr.addEventListener('event', onErr);
+                xhr.addEventListener('abort', onAbt);
+                return xhr;
+            },
+            processData:false
+        });
+        
         var xhr = new XMLHttpRequest();
         var file = $('#upload').get(0).files[0];
         xhr.upload.addEventListener('progress', onUp);
@@ -36,7 +70,7 @@ $(function (){
         xhr.addEventListener('abort', onAbt);
         xhr.open('post', 'upload.php');
         xhr.send(file);
-        
+        */
         /*
         var ajax = $.ajax({
             url: 'upload.php',
@@ -60,7 +94,7 @@ $(function (){
 
 <body>
 <form id="form1" enctype="multipart/form-data" method="post">
-    <input type="file" name="file" id="upload" multiple />
+    <input type="file" name="uploadImg" id="upload" multiple />
     <div id="btn">upload</div>
 </form>
 </body>
