@@ -48,7 +48,7 @@
             </div>
             <div class="h-file-panel">
                 <form id="imgUploadForm" enctype="multipart/form-data" method="post">
-                    <input type="file" class="h-file-upload">
+                    <input type="file" name="imgUpload" class="h-file-upload" multiple>
                 </form>
             </div>
             <div class="h-file-info">
@@ -196,7 +196,7 @@ $(function (){
             $mask.show();
             $dialog.show();
             $close.off('click').on('click', function (){
-                closeImgUpload();
+                closeImgUpload(start);
             });
 
         }
@@ -210,13 +210,56 @@ $(function (){
             $outer.removeClass('h-masked');
             $mask.hide();
             $dialog.hide();
+            if (null !== start){
+                console.log(start);
+                $('#hContent').focus();
+                $('#hContent').get(0).selectionStart = start + 1;
+                $('#hContent').get(0).selectionEnd = start + 1;
+            }
         }
 
         if (start === end && keyCode === 219 && content[start - 1] === '!'){ //![时出现图片插入，图片的特征是![替代文字](链接)
             console.log('弹出上传图片的窗口');
-            openImgUpload();
+            openImgUpload(start);
         }
     });
+
+    //上传图片按钮的事件
+    $('#imgUploadBtn').off('click').on('click', function (){
+        $('#imgUploadForm').ajaxSubmit({
+            url: 'prototype/imgUpload.php',
+            type: 'POST',
+            xhr: function (){
+                var xhr = $.ajaxSettings.xhr();
+                xhr.upload.addEventListener('progress', onUp);
+                xhr.addEventListener('load', onComp);
+                xhr.addEventListener('event', onErr);
+                xhr.addEventListener('abort', onAbt);
+                return xhr;
+            },
+            processData:false
+        });
+        $('#upLoadDialog .h-file-percent-inner').css({width:0});
+    });
+    var onUp = function (e){
+        if (e.lengthComputable){
+            var percent = Math.round(e.loaded * 100 / e.total);
+            $('#upLoadDialog .h-file-percent-inner').css({
+                width: percent + '%'
+            });
+        } else {
+            console.log('can\'t compute');
+        }
+    };
+    var onComp = function (e){
+        
+    };
+    var onErr = function (){
+
+    };
+    var onAbt =function (){
+
+    };
 
 
     inputDealer();
