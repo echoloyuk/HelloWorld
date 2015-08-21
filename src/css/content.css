@@ -44,15 +44,15 @@
 .h-text-content strong,
 .h-text-content b {
   font-weight: bolder;
-  color: #555;
+  color: #333;
 }
 .h-text-content em,
 .h-text-content i {
   font-style: italic;
-  color: #766732;
+  color: #ba4343;
 }
 .h-text-content img {
-  max-width: 98%;
+  max-width: 100%;
   margin: 0.2em 0;
 }
 .h-text-content hr {

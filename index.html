@@ -51,7 +51,7 @@
                     <input type="file" name="imgUpload" class="h-file-upload" multiple>
                 </form>
             </div>
-            <div class="h-file-info">
+            <div class="h-file-info" id="upLoadImgInfo">
                 <span>上传限制：10M，类型：png, jpg, gif</span>
             </div>
             <div class="h-file-percent h-file-percent-outer">
@@ -207,14 +207,36 @@ $(function (){
             var $mask = $('#mask');
             var $dialog = $('#upLoadDialog');
             var $close = $('#closeImgDialog', $dialog);
+
+            var $c = $('#hContent');
+            var c = $c.get(0);
+            var content = $c.val();
+
             $outer.removeClass('h-masked');
             $mask.hide();
             $dialog.hide();
             if (null !== start){
-                console.log(start);
                 $('#hContent').focus();
-                $('#hContent').get(0).selectionStart = start + 1;
-                $('#hContent').get(0).selectionEnd = start + 1;
+
+                if (window.uploadFlag && window.uploadImgUrl){
+                    var strArr = [];
+                    var str = 'img](' + window.uploadImgUrl + ')';
+                    strArr.push(content.substring(0, start + 1));
+                    strArr.push(str);
+                    console.log(content.substring(start + 1, content.length));
+                    strArr.push(content.substring(start + 1, content.length));
+                    $c.val(strArr.join(''));
+                    c.selectionStart = start + str.length + 1;
+                    c.selectionEnd = start + str.length + 1;
+                    window.uploadFlag = false;
+
+                    inputDealer();
+                } else {
+                    c.selectionStart = start + 1;
+                    c.selectionEnd = start + 1;
+                }
+                var strArr = [];
+                
             }
         }
 
@@ -252,7 +274,11 @@ $(function (){
         }
     };
     var onComp = function (e){
-        
+        window.uploadFlag = true;
+        window.uploadImgUrl = e.target.responseText;
+        $('#upLoadImgInfo').html('<span>已经成功上传图片</span>');
+        $('#closeImgDialog').trigger('click');
+
     };
     var onErr = function (){
 

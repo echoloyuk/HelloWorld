@@ -148,7 +148,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 30%;
+  width: 0;
 }
 .h-img-upload-dialog .h-file-upload-btn {
   text-align: center;
