@@ -66,6 +66,8 @@
 </body>
 <script type="text/javascript">
 $(function (){
+
+    //将左侧原文翻译成右侧的实例
     var inputDealer = function (){
         var $title = $('#hTitle'),
             $content = $('#hContent');
@@ -79,6 +81,52 @@ $(function (){
         str += '</div>';
 
         $pre.html(str);
+
+        var start = $content.get(0).selectionStart;
+        textScroller(start);
+    };
+
+    //将左侧的输入位置计算为右侧的文章位置。
+    var textScroller = function (start){
+        if (!$.isNumeric(start)){
+            start = -1;
+        }
+        var $content = $('#hContent');
+        var content = $content.val();
+        var c = $content.get(0);
+        var $prev = $('#hPreview');
+        var $t, pos;
+
+        var flag = false;
+
+        //获取整行文字
+        if (start > 0){
+            var cS = content.lastIndexOf('\n', start - 1); //之所以-1是因为如果光标在当前行的最后一个字符，则会出现问题。
+            var cE = content.indexOf('\n', start);
+            var str = content.substring(cS + 1, cE); //+1是因为cS中有\n
+            str = str.replace(/^[#^*>]{1,}/g, '');
+            str = $.trim(str);
+
+            if ('' !== str){
+                $t = $prev.find('.h-text-content *:contains("' + str + '")');
+                console.log($t.length);
+                if ($t.length > 0){
+                    pos = $t.eq(0).position().top;
+                    flag = true;
+                }
+            }
+        }
+        if (flag){
+            $prev.stop().animate({
+                scrollTop: pos
+            }, 300);
+            console.log(pos)
+        } else {
+            $prev.stop().animate({
+                scrollTop: $prev.find('.h-text-content').height()
+            }, 300);
+        }
+        
     };
 
     $('#hContent').on('input', function (){
@@ -287,6 +335,11 @@ $(function (){
 
     };
 
+    $('#hContent').on('click', function (){
+        var c = $(this).get(0);
+        var start = c.selectionStart;
+        textScroller(start);
+    });
 
     inputDealer();
 
