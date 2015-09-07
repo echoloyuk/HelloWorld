@@ -48,7 +48,7 @@ define(function (require, exports, module){
 		},
 
 		//添加默认键盘事件
-		_addDefaultBtnEffect: function (){
+		_addDefaultKeyEffect: function (){
 			var $target = this.$target,
 				namespace = '.MaCTextAreaAddDefaultEffect';
 			var _this = this;
@@ -131,7 +131,7 @@ define(function (require, exports, module){
 			this._removeDefaultBtnEffect();
 
 			//绑定默认的自带事件
-			this._addDefaultBtnEffect();
+			this._addDefaultKeyEffect();
 		},
 
 		//获得光标位置
