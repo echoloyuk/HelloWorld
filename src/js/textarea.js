@@ -155,7 +155,7 @@ define(function (require, exports, module){
 		},
 
 		//将某个范围的文本替换为指定文字
-		replaceStr: function (start, end, replaceStr, isSelect){
+		replaceStr: function (start, end, replaceStr, isSelect, selectStart, selectEnd){
 			var $target = this.$target,
 				target = this.target,
 				content = $target.val();
@@ -183,9 +183,15 @@ define(function (require, exports, module){
 			if (isSelect === false){
 				target.selectionStart = target.selectionEnd = start + replaceStr.length;
 			} else {
-				//选中新替换的文字
-				target.selectionStart = start;
-				target.selectionEnd = start + replaceStr.length;
+
+				if ($.isNumeric(selectStart) || $.isNumeric(selectEnd)){
+					target.selectionStart = start + (selectStart ? (selectStart + 1) : 0);
+					target.selectionEnd = start + (selectEnd ? (selectEnd + 1) : replaceStr.length);
+				} else {
+					//选中新替换的文字
+					target.selectionStart = start;
+					target.selectionEnd = start + replaceStr.length;
+				}
 			}
 		}
 	});
