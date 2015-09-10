@@ -77,13 +77,13 @@ define(function (require, exports, module){
 				var pos = _this.getSelectionPosition(),
 					start = pos.start,
 					end = pos.end;
-				var firstLineOfRange, rangeStr, spaceStr;
+				var firstLineOfRange, rangeStr, spaceStr, spaceReg, spaceReg2;
 
 				if (start < 0 || end < 0){
 					console.log('selection error');
 					return;
 				}
-				if (keyCode === 9 && !_this._isShift){
+				if (keyCode === 9 && !_this._isShift){ //向后缩进
 
 					//生成空格
 					spaceStr = [];
@@ -110,6 +110,36 @@ define(function (require, exports, module){
 
 						//如果是字符
 						_this.replaceStr(start, end, spaceStr, false);
+					}
+				} else if (keyCode === 9 && _this._isShift){ //向前缩进
+
+					//准备4个空格
+					spaceStr = ['\\n'];
+					for (var i = 0; i < space; i++){
+						spaceStr.push(' ');
+					}
+					spaceStr = spaceStr.join('');
+					spaceReg = new RegExp(spaceStr, 'g');
+					spaceReg2 = new RegExp(spaceStr.replace('\\n', '^'));
+
+					//如果有选取
+					if (start !== end){
+						firstLineOfRange = content.lastIndexOf('\n', start); //需要向前找到当前行的开始
+						if (firstLineOfRange < 1){ //当向前找到了最开头，由于没有\n，需要把第一行也能算进去。
+							firstLineOfRange = 0;
+						}
+						rangeStr = content.substring(firstLineOfRange, end);
+
+						//向左缩进
+						rangeStr = rangeStr.replace(spaceReg, '\n');
+						rangeStr = rangeStr.replace(spaceReg2, ''); //去掉开头的空格
+
+						//替换
+						_this.replaceStr(firstLineOfRange, end, rangeStr);
+
+					//如果是光标
+					} else { 
+
 					}
 				}
 			});
