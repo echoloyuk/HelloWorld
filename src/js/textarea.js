@@ -77,7 +77,7 @@ define(function (require, exports, module){
 				var pos = _this.getSelectionPosition(),
 					start = pos.start,
 					end = pos.end;
-				var firstLineOfRange, rangeStr, spaceStr, spaceReg, spaceReg2;
+				var firstLineOfRange, rangeStr, spaceStr, spaceReg, spaceReg2, tmp1;
 
 				if (start < 0 || end < 0){
 					console.log('selection error');
@@ -94,7 +94,6 @@ define(function (require, exports, module){
 
 					//如果是选中一个选区
 					if (start !== end){
-						/**/
 						firstLineOfRange = content.lastIndexOf('\n', start);
 						if (firstLineOfRange < 0){
 							firstLineOfRange = 0;
@@ -127,6 +126,8 @@ define(function (require, exports, module){
 						firstLineOfRange = content.lastIndexOf('\n', start); //需要向前找到当前行的开始
 						if (firstLineOfRange < 1){ //当向前找到了最开头，由于没有\n，需要把第一行也能算进去。
 							firstLineOfRange = 0;
+						} else {
+							firstLineOfRange++;
 						}
 						rangeStr = content.substring(firstLineOfRange, end);
 
@@ -140,6 +141,32 @@ define(function (require, exports, module){
 					//如果是光标
 					} else { 
 
+						//拿到前面的值
+						firstLineOfRange = content.lastIndexOf('\n', start);
+						if (firstLineOfRange < 1){
+							firstLineOfRange = 0;
+						} else {
+							firstLineOfRange++; //不要\n这个符号
+						}
+						rangeStr = content.substring(firstLineOfRange , end);
+						//关键：判断当前这一行前面的所有内容都是空格
+						for (var i = 0, count = rangeStr.length; i < count; i++){
+							if (rangeStr.charAt(i) !== ' '){
+								return; //任何前面的字符不是空格的，都什么都不做
+							}
+						}
+
+						//替换
+						tmp1 = 0; //tmp用来记录一共需要去掉几个空格
+						for (var i = 0; i < space; i++){
+							if (rangeStr.charAt(rangeStr.length - 1 - i) !== ' '){
+								break;
+							} else {
+								tmp1++;
+							}
+						}
+						rangeStr = rangeStr.substring(0, rangeStr.length - tmp1);
+						_this.replaceStr(firstLineOfRange, end, rangeStr, true, rangeStr.length - 1, rangeStr.length - 1);
 					}
 				}
 			});
@@ -193,7 +220,8 @@ define(function (require, exports, module){
 			var strArr = [],
 				strS, strE, finalStr;
 
-			if (!$.isNumeric(start) || !$.isNumeric(end) || start < 0 || end < 0 || !replaceStr){
+			console.log(start);
+			if (!$.isNumeric(start) || !$.isNumeric(end) || start < 0 || end < 0 || null === replaceStr){
 				console.log('start or end or replaceStr error');
 				return;
 			}
@@ -215,8 +243,8 @@ define(function (require, exports, module){
 			} else {
 
 				if ($.isNumeric(selectStart) || $.isNumeric(selectEnd)){
-					target.selectionStart = start + (selectStart ? (selectStart + 1) : 0);
-					target.selectionEnd = start + (selectEnd ? (selectEnd + 1) : replaceStr.length);
+					target.selectionStart = start + ($.isNumeric(selectStart) ? (selectStart + 1) : 0);
+					target.selectionEnd = start + ($.isNumeric(selectEnd) ? (selectEnd + 1) : replaceStr.length);
 				} else {
 					//选中新替换的文字
 					target.selectionStart = start;
