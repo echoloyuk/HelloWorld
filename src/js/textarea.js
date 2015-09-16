@@ -104,7 +104,7 @@ define(function (require, exports, module){
 							rangeStr = spaceStr + rangeStr;
 						}
 						
-						_this.replaceStr(firstLineOfRange, end, rangeStr);
+						_this.replaceStr(firstLineOfRange, end, rangeStr, null, 0); //在chrome下\n的选中是在上一行。
 					} else {
 
 						//如果是字符
@@ -212,6 +212,7 @@ define(function (require, exports, module){
 		},
 
 		//将某个范围的文本替换为指定文字
+        //这里的selectStart和selectEnd是指replaceStr的起始和终止位置。而不是原文的位置。
 		replaceStr: function (start, end, replaceStr, isSelect, selectStart, selectEnd){
 			var $target = this.$target,
 				target = this.target,
