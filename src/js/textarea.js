@@ -11,6 +11,16 @@ define(function (require, exports, module){
 		this.target = null; // textarea的DOM对象
 		this.tabBtnSpace = 4; //tab键的默认空格数量，默认为4个空格
 		this.onTextChange = null; //当任何文本发生变化时的回调函数。
+        this.extendKeyEvent = null; //拓展的键盘事件。默认为keyup。
+        /* 拓展事件
+        extendKeyEvent = [{
+            type: 'keyup', //事件类型
+            reg: /cma$/,
+            handler: function (keyCode, curStr, content){
+                this; //object
+            }
+        }]
+        */
 
 		//内部变量
 		this._id = 'MaCTextArea'; //组件内部id，用于事件的命名空间等。
@@ -170,8 +180,54 @@ define(function (require, exports, module){
 					}
 				}
 			});
-		}
+		},
+
+        //绑定拓展的键盘事件
+        _addExtendKeyEffect: function (){
+            var $target = this.$target,
+                namespace = '.MaCTextAreaAddExtendEffect';
+            var _this = this;
+
+            $target.off(namespace); //去掉所有的拓展事件
+
+            //这里之所以使用keyup的原因是需要得到按键按下后的整体内容
+            $target.on('keyup', function (e){
+                var eventList = _this.extendKeyEvent,
+                    keyCode = e.keyCode,
+                    content = $target.val(),
+                    pos = _this.getSelectionPosition(),
+                    start = pos.start,
+                    end = pos.end;
+                var curStr = content.substring(0, start);
+                var cur, curF, curR;
+
+                //事件列表为空时，就不用循环了。
+                if (!eventList || !$.isArray(eventList) || eventList.length < 1){
+                    return;
+                }
+
+                for (var i = 0, count = eventList.length; i < count; i++){
+                    cur = eventList[i];
+                    curF = cur['handler'];
+                    curR = cur['reg'];
+                    if (curR && curR.test){
+                        if (curR.test(curStr)){
+                            if (cur && cur['type'] === 'keyup' && typeof curF === 'function'){
+                                curF.call(_this, keyCode, curStr, content);
+                            }
+                        }
+                    } else {
+                        if (cur && cur['type'] === 'keyup' && typeof curF === 'function'){
+                            curF.call(_this, keyCode, curStr, content);
+                        }
+                    }
+                }
+
+            });
+        }
+
 	});
+    
 
 	//外部方法
 	$.extend(TextArea.prototype, {
@@ -189,6 +245,9 @@ define(function (require, exports, module){
 
 			//绑定默认的自带事件
 			this._addDefaultKeyEffect();
+
+            //绑定拓展的事件
+            this._addExtendKeyEffect();
 		},
 
 		//获得光标位置
@@ -221,7 +280,6 @@ define(function (require, exports, module){
 			var strArr = [],
 				strS, strE, finalStr;
 
-			console.log(start);
 			if (!$.isNumeric(start) || !$.isNumeric(end) || start < 0 || end < 0 || null === replaceStr){
 				console.log('start or end or replaceStr error');
 				return;
