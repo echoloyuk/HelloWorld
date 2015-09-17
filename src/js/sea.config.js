@@ -7,7 +7,11 @@ seajs.config({
 		marked: 'src/js/marked.js', //markdown parser
 
 		//self code
-		TextArea: 'src/js/textarea.js'
+		HelloWorld: 'src/js/components/helloworld.js',
+
+		TextArea: 'src/js/components/textarea.js',
+		EditorCSS: 'src/css/editor.css',
+		MarkdownParser: 'src/js/components/markdownparser.js'
 	},
 	preload: [
 		'jquery'

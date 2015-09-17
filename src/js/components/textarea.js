@@ -1,8 +1,3 @@
-/*
- * textarea部分的代码，用于处理textarea中的文字输入等问题的组件。
- * 作者：machi
- */
-
 define(function (require, exports, module){
 
 	//textarea组件的构造函数
