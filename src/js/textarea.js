@@ -294,11 +294,6 @@ define(function (require, exports, module){
 			finalStr = strArr.join('');
 			$target.val(finalStr);
 
-			//响应回调函数
-			if (typeof onTextChange === 'function'){
-				onTextChange.call(this, $target);
-			}
-
 			if (isSelect === false){
 				target.selectionStart = target.selectionEnd = start + replaceStr.length;
 			} else {
@@ -311,6 +306,11 @@ define(function (require, exports, module){
 					target.selectionStart = start;
 					target.selectionEnd = start + replaceStr.length;
 				}
+			}
+
+			//响应回调函数
+			if (typeof onTextChange === 'function'){
+				onTextChange.call(this, $target);
 			}
 		}
 	});
