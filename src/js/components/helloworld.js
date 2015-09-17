@@ -9,6 +9,8 @@ define(function (require, exports, module){
 	var MarkdownParser = require('MarkdownParser');
     var TextArea = require('TextArea');
 
+    //console.log(MarkdownParser);
+
     //id
     var id = 'HelloWorld';
 
@@ -57,7 +59,19 @@ define(function (require, exports, module){
             if (!$html.length){
                 $html = $(html).appendTo($target);
             }
+        },
 
+        //自动生成正文
+        _toPreview: function (){
+            var $target = this.$target,
+                title = $('#hTitle', $target).val(),
+                text = this.textarea.getContent(),
+                $prev = $('#hPreview', $target),
+                $titlePanel = $('.h-text-content-title', $prev),
+                $contentPanel = $('.h-text-content', $prev);
+
+            $titlePanel.html((title || '无标题'));
+            $contentPanel.html(MarkdownParser(text));
         }
     });
 
@@ -66,14 +80,37 @@ define(function (require, exports, module){
 
         //初始化
         init: function (){
-            var $target = this.$target;
+            var $target = this.$target,
+                $title, $textarea;
+            var namespace = '.HelloWorldTitleEvent';
+            var _this = this;
 
             //生成主体html
             this._createMainHTML();
 
+            $title = $('#hTitle', $target),
+            $textarea = $('#hContent', $target);
+
             //初始化textarea
             this.textarea = new TextArea($('#hContent', $target));
+            this.textarea.onTextChange = function (){
+                _this._toPreview();
+            };
             this.textarea.init();
+
+            //绑定title的事件
+            $title.off(namespace).on('keyboardInput' + namespace, function (){
+                _this._toPreview();
+            }).on('input' + namespace, function (){
+                $(this).trigger('keyboardInput');
+            });
+
+            //绑定content事件
+            $textarea.off(namespace).on('keyboardInput', function (){
+                _this._toPreview();
+            }).on('input' + namespace, function (){
+                $(this).trigger('keyboardInput');
+            });
         }
     });
 
