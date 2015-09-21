@@ -122,6 +122,11 @@ define(function (require, exports, module){
             }).on('input' + namespace, function (){
                 $(this).trigger('keyboardInput');
             });
+        },
+
+        //拓展
+        extend: function (obj){
+            $.extend(this, obj);
         }
     });
 
