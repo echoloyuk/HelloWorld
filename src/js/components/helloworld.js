@@ -109,6 +109,8 @@ define(function (require, exports, module){
             };
             this.textarea.init();
 
+            //-------init变量完毕------
+
             //绑定title的事件
             $title.off(namespace).on('keyboardInput' + namespace, function (){
                 _this._toPreview();
