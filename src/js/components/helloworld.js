@@ -74,9 +74,63 @@ define(function (require, exports, module){
             $contentPanel.html(MarkdownParser(text));
         },
 
+        //显示上传dialog
+        _showImgUpLoadDialog: function(){
+
+        },
+
+        //初始化textarea
+        _initTextArea: function (){
+            var $target = this.$target,
+                _this = this,
+                textarea = new TextArea($('#hContent', $target));
+
+            this.textarea = textarea;
+
+            textarea.onTextChange = function (){
+                _this._toPreview();
+            };
+            textarea.extendKeyEvent = [{
+                type: 'keyup', //事件类型
+                reg: /\!\[$/,
+                handler: function (keyCode, curStr, content){
+                    _this._showDialog();
+                }
+            }]
+
+            textarea.init();
+        },
+
         //获得弹出框。该弹出框是单例模式，只允许一个弹出框显示。
         _getDialog: function (){
-            
+            var $target = this.$target,
+                $dialog = $('.h-dialog', $target);
+
+            if (!$dialog || !$dialog.length){
+                $dialog = $('<div class="h-dialog h-img-upload" id="hImgUpLoad"></div>').appendTo($target);
+            }
+
+            return $dialog;
+        },
+
+        //显示dialog
+        _showDialog: function (){
+            var $target = this.$target,
+                $dialog = this._getDialog(),
+                $helloworld = $('#HelloWorld', $target);
+
+            $helloworld.addClass('h-masked');
+            $dialog.show();
+        },
+
+        //隐藏dialog
+        _hideDialog: function (){
+            var $target = this.$target,
+                $dialog = this._getDialog(),
+                $helloworld = $('#HelloWorld', $target);
+
+            $helloworld.removeClass('h-masked');
+            $dialog.hide();
         },
 
         //获得提示框。该提示框是单例模式，只允许一个提示框显示。
@@ -103,11 +157,7 @@ define(function (require, exports, module){
             $textarea = $('#hContent', $target);
 
             //初始化textarea
-            this.textarea = new TextArea($('#hContent', $target));
-            this.textarea.onTextChange = function (){
-                _this._toPreview();
-            };
-            this.textarea.init();
+            this._initTextArea();
 
             //-------init变量完毕------
 
