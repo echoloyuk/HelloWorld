@@ -76,7 +76,7 @@ define(function (require, exports, module){
 
         //获得弹出框。该弹出框是单例模式，只允许一个弹出框显示。
         _getDialog: function (){
-
+            
         },
 
         //获得提示框。该提示框是单例模式，只允许一个提示框显示。

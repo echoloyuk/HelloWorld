@@ -11,7 +11,8 @@ seajs.config({
 
 		TextArea: 'src/js/components/textarea.js',
 		EditorCSS: 'src/css/editor.css',
-		MarkdownParser: 'src/js/components/markdownparser.js'
+		MarkdownParser: 'src/js/components/markdownparser.js',
+		Util: 'src/js/components/util.js'
 	},
 	preload: [
 		'jquery'
