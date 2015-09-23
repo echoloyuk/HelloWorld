@@ -307,6 +307,20 @@ define(function (require, exports, module){
 					target.selectionEnd = start + replaceStr.length;
 				}
 			}
+		},
+
+		//设置焦点，并设置光标位置。
+		setPosition: function (start, end){
+			var $target = this.$target,
+				target = this.target;
+
+			$target.focus();
+			if ($.isNumeric(start)){
+				target.selectionStart = start;
+				if ($.isNumeric(end)){
+					target.selectionEnd = end;
+				}
+			}
 		}
 	});
 

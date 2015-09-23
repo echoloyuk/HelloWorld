@@ -8,6 +8,7 @@ define(function (require, exports, module){
 	//依赖的模块
 	var MarkdownParser = require('MarkdownParser');
     var TextArea = require('TextArea');
+    var Util = require('Util');
 
     //console.log(MarkdownParser);
 
@@ -76,7 +77,53 @@ define(function (require, exports, module){
 
         //显示上传dialog
         _showImgUpLoadDialog: function(){
+            var $target = this.$target,
+                _this = this;
+            var $dialog = _this._getDialog(),
+                namespace = '.HelloWorldUpLoadImgEvent';
+            var $file, $alt, $submit, $autoClose;
+            var html = '<div class="h-dialog-ctrl-panel">' +
+                            '<div class="h-dialog-title">上传图片</div>' +
+                            '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
+                        '</div>' +
+                        '<div class="h-dialog-form">' +
+                            '<div class="h-dialog-input">' +
+                                '<span>图片：</span>' +
+                                '<input type="file" id="hImgUpLoadInput" class="h-dialog-upfile" />' +
+                            '</div>' +
+                            '<div class="h-dialog-input">' +
+                                '<span>标题：</span>' +
+                                '<input type="text" class="h-dialog-text" id="hImgAlt" />' +
+                            '</div>' +
+                            '<div class="h-dialog-upload-percentage">' +
+                                '<div class="h-dialog-upload-inner"></div>' +
+                            '</div>' +
+                            '<div class="h-dialog-btn" id="hImgUpLoadBtn">上传</div>' +
+                        '</div>';
+            
+            $dialog.empty().html(html); //增加css
+            _this._showDialog(); //显示
 
+            $file = $('#hImgUpLoadInput', $dialog);
+            $alt = $('#hImgAlt', $dialog);
+            $submit = $('#hImgUpLoadBtn', $dialog);
+            $autoClose = $('#hDialogCloseBtn', $dialog);
+
+            $autoClose.off(namespace).on('click' + namespace, function (){
+                _this._hideImgUpLoadDialog();
+            });
+        },
+
+        //关闭上传图片窗口
+        _hideImgUpLoadDialog: function (){
+            var $target = this.$target,
+                _this = this;
+            var textarea = _this.textarea,
+                pos = textarea.getCursorPosition();
+
+            _this._hideDialog();
+            
+            textarea.setPosition(pos);
         },
 
         //初始化textarea
@@ -94,9 +141,9 @@ define(function (require, exports, module){
                 type: 'keyup', //事件类型
                 reg: /\!\[$/,
                 handler: function (keyCode, curStr, content){
-                    _this._showDialog();
+                    _this._showImgUpLoadDialog();
                 }
-            }]
+            }];
 
             textarea.init();
         },
@@ -121,6 +168,9 @@ define(function (require, exports, module){
 
             $helloworld.addClass('h-masked');
             $dialog.show();
+
+            //显示在最中央
+            Util.toDIVCenter($dialog);
         },
 
         //隐藏dialog
