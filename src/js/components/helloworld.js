@@ -10,7 +10,8 @@ define(function (require, exports, module){
     var TextArea = require('TextArea');
     var Util = require('Util');
 
-    //console.log(MarkdownParser);
+    //引入jquery form
+    require('form');
 
     //id
     var id = 'HelloWorld';
@@ -21,6 +22,7 @@ define(function (require, exports, module){
     var Editor = function ($target){
         this.$target = null; //编辑器放在哪个容器中。必须是jquery对象。
         this.textarea = null; //编辑器textarea变量
+        this.imgUrl = null; //编辑器的图片上传地址。该地址是后台上传路径。
 
         if ($target instanceof jQuery){
             this.$target = $target;
@@ -87,14 +89,16 @@ define(function (require, exports, module){
                             '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
                         '</div>' +
                         '<div class="h-dialog-form">' +
-                            '<div class="h-dialog-input">' +
-                                '<span>图片：</span>' +
-                                '<input type="file" id="hImgUpLoadInput" class="h-dialog-upfile" />' +
-                            '</div>' +
-                            '<div class="h-dialog-input">' +
-                                '<span>标题：</span>' +
-                                '<input type="text" class="h-dialog-text" id="hImgAlt" />' +
-                            '</div>' +
+                            '<form id="imgUploadForm" enctype="multipart/form-data" method="post">' +
+                                '<div class="h-dialog-input">' +
+                                    '<span>图片：</span>' +
+                                    '<input type="file" id="hImgUpLoadInput" class="h-dialog-upfile" />' +
+                                '</div>' +
+                                '<div class="h-dialog-input">' +
+                                    '<span>标题：</span>' +
+                                    '<input type="text" class="h-dialog-text" id="hImgAlt" />' +
+                                '</div>' +
+                            '</form>' +
                             '<div class="h-dialog-upload-percentage">' +
                                 '<div class="h-dialog-upload-inner"></div>' +
                             '</div>' +
@@ -122,7 +126,7 @@ define(function (require, exports, module){
                 pos = textarea.getCursorPosition();
 
             _this._hideDialog();
-            
+
             textarea.setPosition(pos);
         },
 
