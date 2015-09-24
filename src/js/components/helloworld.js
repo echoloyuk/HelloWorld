@@ -95,6 +95,11 @@ define(function (require, exports, module){
                                     '<span>图片：</span>' +
                                     '<input type="file" name="hImgUpLoadInput" id="hImgUpLoadInput" class="h-dialog-upfile" multiple/>' +
                                 '</div>' +
+                                '或' +
+                                '<div class="h-dialog-input">' +
+                                    '<span>网址：</span>' +
+                                    '<input type="text" name="hImgLinkInput" id="hImgLinkInput"/>' +
+                                '</div>' +
                                 '<div class="h-dialog-input">' +
                                     '<span>标题：</span>' +
                                     '<input type="text" name="hImgAlt" class="h-dialog-text" id="hImgAlt" />' +
@@ -103,7 +108,7 @@ define(function (require, exports, module){
                             '<div class="h-dialog-upload-percentage" id="hImgUpLoadProcess">' +
                                 '<div class="h-dialog-upload-inner"></div>' +
                             '</div>' +
-                            '<div class="h-dialog-btn" id="hImgUpLoadBtn">上传</div>' +
+                            '<div class="h-dialog-btn" id="hImgSubmitBtn">提交</div>' +
                             '<div class="h-dialog-info" id="hImgUpLoadInfo"></div>'
                         '</div>';
 
@@ -114,8 +119,9 @@ define(function (require, exports, module){
             _this._showDialog(); //显示
 
             $file = $('#hImgUpLoadInput', $dialog);
+            $link = $('#hImgLinkInput', $dialog);
             $alt = $('#hImgAlt', $dialog);
-            $submit = $('#hImgUpLoadBtn', $dialog);
+            $submit = $('#hImgSubmitBtn', $dialog);
             $autoClose = $('#hDialogCloseBtn', $dialog);
             $form = $('#imgUploadForm', $dialog);
             $info = $('#hImgUpLoadInfo', $dialog);
@@ -125,26 +131,30 @@ define(function (require, exports, module){
                 _this._hideImgUpLoadDialog(pos);
             });
 
-            //上传按钮的点击事件
+            //提交按钮的点击事件
             $submit.off(namespace).on('click' + namespace, function (){
-                if(!$file.val()){
-                    $info.html('请指定文件');
+                if (!$link.val() && !$file.val()){
+                    $info.html('请指定图片');
                     return;
                 }
-                $form.ajaxSubmit({
-                    url :_this.imgUrl,
-                    type: 'POST',
-                    xhr: function (){
-                        /**/
-                        var xhr = $.ajaxSettings.xhr();
-                        xhr.upload.addEventListener('progress', _this._onUpLoadImgProgress(_this));
-                        xhr.addEventListener('load', _this._onUpLoadImgComplete(_this));
-                        xhr.addEventListener('event', _this._onUpLoadImgError(_this));
-                        //xhr.addEventListener('abort', _this._onUpLoadImgAbort);
-                        return xhr;
-                    },
-                    processData:false
-                });
+                if ($file.val()){
+                    $form.ajaxSubmit({
+                        url :_this.imgUrl,
+                        type: 'POST',
+                        xhr: function (){
+                            var xhr = $.ajaxSettings.xhr();
+                            xhr.upload.addEventListener('progress', _this._onUpLoadImgProgress(_this));
+                            xhr.addEventListener('load', _this._onUpLoadImgComplete(_this, pos));
+                            xhr.addEventListener('event', _this._onUpLoadImgError(_this));
+                            //xhr.addEventListener('abort', _this._onUpLoadImgAbort);
+                            return xhr;
+                        },
+                        processData:false
+                    });
+                } else { //直接写link
+
+                }
+                
                 
             });
 
@@ -171,9 +181,35 @@ define(function (require, exports, module){
         },
 
         //内部回调。上传文件成功的回调函数。
-        _onUpLoadImgComplete: function (_this){
+        _onUpLoadImgComplete: function (_this, pos){
             return function (e){
-                console.log('complete');
+                var $target = _this.$target,
+                    $dialog = _this._getDialog(),
+                    alt = $('#hImgAlt', $dialog).val(),
+                    $info = $('#hImgUpLoadInfo', $dialog),
+                    textarea = _this.textarea,
+                    result = e.target.responseText;
+
+                // ![alg](http://www.baidu.com)
+                var st = -1, en, str = '';
+                if (alt){
+                    en = alt.length - 1;
+                    str += alt
+                } else {
+                    en = 2;
+                    str += 'img';
+                }
+                str += '](' + result + ')';
+
+                if (!result){
+                    $info.html('上传出现了问题');
+                } else {
+                    textarea.replaceStr(pos, pos, str, true, st, en);
+                }
+
+                _this._hideImgUpLoadDialog();
+
+
             }
         },
 
@@ -195,7 +231,9 @@ define(function (require, exports, module){
             
             _this._hideDialog();
 
-            textarea.setPosition(pos);
+            if (pos && $.isNumeric(pos)){
+                textarea.setPosition(pos);
+            }
         },
 
         //初始化textarea

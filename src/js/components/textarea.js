@@ -297,7 +297,7 @@ define(function (require, exports, module){
 			if (isSelect === false){
 				target.selectionStart = target.selectionEnd = start + replaceStr.length;
 			} else {
-
+				$target.focus();
 				if ($.isNumeric(selectStart) || $.isNumeric(selectEnd)){
 					target.selectionStart = start + ($.isNumeric(selectStart) ? (selectStart + 1) : 0);
 					target.selectionEnd = start + ($.isNumeric(selectEnd) ? (selectEnd + 1) : replaceStr.length);
