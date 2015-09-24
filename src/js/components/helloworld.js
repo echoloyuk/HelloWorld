@@ -22,7 +22,7 @@ define(function (require, exports, module){
     var Editor = function ($target){
         this.$target = null; //编辑器放在哪个容器中。必须是jquery对象。
         this.textarea = null; //编辑器textarea变量
-        this.imgUrl = null; //编辑器的图片上传地址。该地址是后台上传路径。
+        this.imgUrl = 'prototype/uploader.php'; //编辑器的图片上传地址。该地址是后台上传路径。
 
         if ($target instanceof jQuery){
             this.$target = $target;
@@ -80,11 +80,12 @@ define(function (require, exports, module){
         //显示上传dialog
         _showImgUpLoadDialog: function(){
             var $target = this.$target,
-                _this = this;
-            var $dialog = _this._getDialog(),
-                namespace = '.HelloWorldUpLoadImgEvent';
-            var $file, $alt, $submit, $autoClose;
-            var html = '<div class="h-dialog-ctrl-panel">' +
+                _this = this,
+                $dialog = _this._getDialog(),
+                namespace = '.HelloWorldUpLoadImgEvent',
+                textarea = _this.textarea,
+                $file, $alt, $submit, $autoClose, $form,
+                html = '<div class="h-dialog-ctrl-panel">' +
                             '<div class="h-dialog-title">上传图片</div>' +
                             '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
                         '</div>' +
@@ -92,18 +93,22 @@ define(function (require, exports, module){
                             '<form id="imgUploadForm" enctype="multipart/form-data" method="post">' +
                                 '<div class="h-dialog-input">' +
                                     '<span>图片：</span>' +
-                                    '<input type="file" id="hImgUpLoadInput" class="h-dialog-upfile" />' +
+                                    '<input type="file" name="hImgUpLoadInput" id="hImgUpLoadInput" class="h-dialog-upfile" multiple/>' +
                                 '</div>' +
                                 '<div class="h-dialog-input">' +
                                     '<span>标题：</span>' +
-                                    '<input type="text" class="h-dialog-text" id="hImgAlt" />' +
+                                    '<input type="text" name="hImgAlt" class="h-dialog-text" id="hImgAlt" />' +
                                 '</div>' +
                             '</form>' +
-                            '<div class="h-dialog-upload-percentage">' +
+                            '<div class="h-dialog-upload-percentage" id="hImgUpLoadProcess">' +
                                 '<div class="h-dialog-upload-inner"></div>' +
                             '</div>' +
                             '<div class="h-dialog-btn" id="hImgUpLoadBtn">上传</div>' +
+                            '<div class="h-dialog-info" id="hImgUpLoadInfo"></div>'
                         '</div>';
+
+            var pos = textarea.getCursorPosition();
+            textarea.$target.blur(); //需要把输入框的光标去掉。
             
             $dialog.empty().html(html); //增加css
             _this._showDialog(); //显示
@@ -112,19 +117,82 @@ define(function (require, exports, module){
             $alt = $('#hImgAlt', $dialog);
             $submit = $('#hImgUpLoadBtn', $dialog);
             $autoClose = $('#hDialogCloseBtn', $dialog);
+            $form = $('#imgUploadForm', $dialog);
+            $info = $('#hImgUpLoadInfo', $dialog);
 
+            //右上角关闭按钮的事件
             $autoClose.off(namespace).on('click' + namespace, function (){
-                _this._hideImgUpLoadDialog();
+                _this._hideImgUpLoadDialog(pos);
             });
+
+            //上传按钮的点击事件
+            $submit.off(namespace).on('click' + namespace, function (){
+                if(!$file.val()){
+                    $info.html('请指定文件');
+                    return;
+                }
+                $form.ajaxSubmit({
+                    url :_this.imgUrl,
+                    type: 'POST',
+                    xhr: function (){
+                        /**/
+                        var xhr = $.ajaxSettings.xhr();
+                        xhr.upload.addEventListener('progress', _this._onUpLoadImgProgress(_this));
+                        xhr.addEventListener('load', _this._onUpLoadImgComplete(_this));
+                        xhr.addEventListener('event', _this._onUpLoadImgError(_this));
+                        //xhr.addEventListener('abort', _this._onUpLoadImgAbort);
+                        return xhr;
+                    },
+                    processData:false
+                });
+                
+            });
+
+        },
+
+        //内部回调。上传文件过程的回调函数。
+        _onUpLoadImgProgress: function (_this){
+            return function (e){
+                var $target = _this.$target,
+                    $dialog = _this._getDialog(),
+                    $info = $('#hImgUpLoadInfo', $dialog),
+                    $per = $('#hImgUpLoadProcess .h-dialog-upload-inner', $dialog);
+
+                if (e.lengthComputable){
+                    var percent = Math.round(e.loaded * 100 / e.total);
+                    $per.css({
+                        width: percent + '%'
+                    });
+                } else {
+                    $info.html('不能计算上传进度...');
+                    console && console.log('Cannot compute the percent, but it still uploading.');
+                }
+            }
+        },
+
+        //内部回调。上传文件成功的回调函数。
+        _onUpLoadImgComplete: function (_this){
+            return function (e){
+                console.log('complete');
+            }
+        },
+
+        //内部回调。上传文件失败的回调函数
+        _onUpLoadImgError: function (_this){
+            return function (e){
+                var $target = _this.$target,
+                    $dialog = _this._getDialog(),
+                    $info = $('#hImgUpLoadInfo', $dialog);
+                $info.html('上传失败，原因：' + e.toString());
+            }
         },
 
         //关闭上传图片窗口
-        _hideImgUpLoadDialog: function (){
+        _hideImgUpLoadDialog: function (pos){
             var $target = this.$target,
                 _this = this;
-            var textarea = _this.textarea,
-                pos = textarea.getCursorPosition();
-
+            var textarea = _this.textarea;
+            
             _this._hideDialog();
 
             textarea.setPosition(pos);

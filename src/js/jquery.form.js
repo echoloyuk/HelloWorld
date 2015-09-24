@@ -11,6 +11,8 @@
 /*global ActiveXObject */
 
 // AMD support
+define(function (require, exports, module){
+
 (function (factory) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -309,7 +311,6 @@ $.fn.ajaxSubmit = function(options) {
             cache: false,
             type: method || 'POST'
         });
-
         if (options.uploadProgress) {
             // workaround because jqXHR does not expose upload property
             s.xhr = function() {
@@ -1275,3 +1276,4 @@ function log() {
 }
 
 }));
+});
