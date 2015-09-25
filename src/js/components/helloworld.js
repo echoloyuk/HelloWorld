@@ -184,8 +184,20 @@ define(function (require, exports, module){
                 } else { //直接写link
 
                 }
-                
-                
+            });
+
+            //用户体验，当窗口弹出时，支持ESC关闭和ENTER的上传图片
+            $(window).off(namespace).on('keyup' + namespace, function (e){
+                var keyCode = e.keyCode;
+                console.log(keyCode);
+                switch (keyCode){
+                    case 27: //esc
+                        _this._hideImgUpLoadDialog(pos);
+                        break;
+                    case 13: //enter
+                        $file.focus().trigger('click');
+                        break;
+                }
             });
 
         },
@@ -256,7 +268,8 @@ define(function (require, exports, module){
         //关闭上传图片窗口
         _hideImgUpLoadDialog: function (pos){
             var $target = this.$target,
-                _this = this;
+                _this = this,
+                namespace = '.HelloWorldUpLoadImgEvent';
             var textarea = _this.textarea;
             
             _this._hideDialog();
@@ -264,6 +277,8 @@ define(function (require, exports, module){
             if (pos && $.isNumeric(pos)){
                 textarea.setPosition(pos);
             }
+
+            $(window).off(namespace);
         },
 
         //初始化textarea
