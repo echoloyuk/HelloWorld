@@ -15,7 +15,8 @@ define(function (require, exports, module){
             reg: /cma$/,
             handler: function (keyCode, curStr, content){
                 this; //object
-            }
+            },
+            dirKey: false //方向键响应吗？如果为true，则方向键响应。默认不响应
         }]
         */
 
@@ -201,6 +202,11 @@ define(function (require, exports, module){
                 //事件列表为空时，就不用循环了。
                 if (!eventList || !$.isArray(eventList) || eventList.length < 1){
                     return;
+                }
+
+                //如果方向键不响应
+                if (!_this.dirKey && (keyCode >= 37 && keyCode <= 40)){
+                	return;
                 }
 
                 for (var i = 0, count = eventList.length; i < count; i++){

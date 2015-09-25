@@ -23,6 +23,7 @@ define(function (require, exports, module){
         this.$target = null; //编辑器放在哪个容器中。必须是jquery对象。
         this.textarea = null; //编辑器textarea变量
         this.imgUrl = 'prototype/uploader.php'; //编辑器的图片上传地址。该地址是后台上传路径。
+        this.imgMaxSize = 4 * 1024;
 
         if ($target instanceof jQuery){
             this.$target = $target;
@@ -77,6 +78,28 @@ define(function (require, exports, module){
             $contentPanel.html(MarkdownParser(text));
         },
 
+        //验证上传图片是否正确
+        _checkUpLoadImg: function ($file){
+            var file = $file.get(0).files[0];
+            var size = Math.floor(file.size / 1024),
+                type = file.type,
+                maxSize = this.imgMaxSize;
+            var $target = this.$target,
+                $dialog = this._getDialog(),
+                $info = $('#hImgUpLoadInfo', $dialog);
+            
+            if (size > maxSize){
+                $info.html('文件过大，限制大小：' + maxSize + 'KB，您的文件大小：' + size + 'KB');
+                return false;
+            }
+            if (type !== 'image/png' && type !== 'image/jpeg' && type !== 'image/gif'){
+                $info.html('格式不对，只支持png、jpg和gif格式');
+                return false;
+            }
+            $info.html('可以上传');
+            return true;
+        },
+
         //显示上传dialog
         _showImgUpLoadDialog: function(){
             var $target = this.$target,
@@ -126,6 +149,12 @@ define(function (require, exports, module){
             $form = $('#imgUploadForm', $dialog);
             $info = $('#hImgUpLoadInfo', $dialog);
 
+            //文件上传之前的文件内容
+            $file.off(namespace).on('change' + namespace, function (){
+                var $this = $(this);
+                _this._checkUpLoadImg($this);
+            });
+
             //右上角关闭按钮的事件
             $autoClose.off(namespace).on('click' + namespace, function (){
                 _this._hideImgUpLoadDialog(pos);
@@ -137,7 +166,8 @@ define(function (require, exports, module){
                     $info.html('请指定图片');
                     return;
                 }
-                if ($file.val()){
+                var check = _this._checkUpLoadImg($file);
+                if ($file.val() && check){
                     $form.ajaxSubmit({
                         url :_this.imgUrl,
                         type: 'POST',
@@ -193,7 +223,7 @@ define(function (require, exports, module){
                 // ![alg](http://www.baidu.com)
                 var st = -1, en, str = '';
                 if (alt){
-                    en = alt.length - 1;
+                    en = st = alt.length + result.length + 2;
                     str += alt
                 } else {
                     en = 2;
