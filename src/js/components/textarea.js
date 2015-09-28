@@ -16,7 +16,8 @@ define(function (require, exports, module){
             handler: function (keyCode, curStr, content){
                 this; //object
             },
-            dirKey: false //方向键响应吗？如果为true，则方向键响应。默认不响应
+            dirKey: false, //方向键响应吗？如果为true，则方向键响应。默认不响应
+            backspace: false //退格键响应吗？如果为true，则退格键响应。默认不响应 
         }]
         */
 
@@ -197,7 +198,7 @@ define(function (require, exports, module){
                     start = pos.start,
                     end = pos.end;
                 var curStr = content.substring(0, start);
-                var cur, curF, curR;
+                var cur, curF, curR, curD, curB;
 
                 //事件列表为空时，就不用循环了。
                 if (!eventList || !$.isArray(eventList) || eventList.length < 1){
@@ -209,10 +210,26 @@ define(function (require, exports, module){
                 	return;
                 }
 
+                //如果退格键不响应
+                if (!_this.backspace)
+
                 for (var i = 0, count = eventList.length; i < count; i++){
                     cur = eventList[i];
                     curF = cur['handler'];
                     curR = cur['reg'];
+                    curD = cur['dirKey']; //dirKey
+                    curB = cur['backspace']; //backspace
+
+                    //当dirkey不是true时，则不响应
+                	if (!curD && (keyCode >= 37 && keyCode <= 40)){
+                		continue;
+                	}
+
+                	//当退格键不是true时，则不响应
+                	if (!curB && keyCode === 8){
+                		continue
+                	}
+
                     if (curR && curR.test){
                         if (curR.test(curStr)){
                             if (cur && cur['type'] === 'keyup' && typeof curF === 'function'){
