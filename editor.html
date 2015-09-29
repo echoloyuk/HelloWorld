@@ -11,9 +11,6 @@
 seajs.use(['HelloWorld'], function (HelloWorld){
     $(function (){
         var e = new HelloWorld($('#main'));
-        e.extend({
-            name: 'machi'
-        });
         e.init();
         console.log(e);
     });

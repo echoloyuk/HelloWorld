@@ -24,6 +24,21 @@ define(function (require, exports, module){
         this.textarea = null; //编辑器textarea变量
         this.imgUrl = 'prototype/uploader.php'; //编辑器的图片上传地址。该地址是后台上传路径。
         this.imgMaxSize = 4 * 1024;
+        this.extendIcon = [//编辑器的图标
+            {
+                name: '插入图片',
+                iconCls: 'h-icon-img',
+                onClick: this._defaultIconEvent4Img
+            }
+        ]; 
+        /*
+        图标格式：
+        extendIcon = [
+            iconCls: 'h-img', //图标的样式
+            name: '', //图标的名称
+            onClick: function (){}, //图标点击的回调函数
+        ]    
+        */
 
         if ($target instanceof jQuery){
             this.$target = $target;
@@ -44,9 +59,7 @@ define(function (require, exports, module){
                     '<div class="h-title-panel">' +
                         '<input type="text" id="hTitle" class="h-title" placeholder="在这里输入标题">' +
                     '</div>' +
-                    '<div class="h-tool-panel">' +
-                        '<div class="h-tool-item h-tool-pic" title="图片">图片</div>' +
-                        '<div class="h-tool-item h-tool-pic" title="链接">链接</div>' +
+                    '<div class="h-tool-panel" id="hIcon">' +
                     '</div>' +
                     '<div class="h-content-panel">' +
                         '<textarea class="h-content" id="hContent" placeholder="在这里输入正文"></textarea>' +
@@ -338,6 +351,29 @@ define(function (require, exports, module){
             $dialog.hide();
         },
 
+        //绑定拓展的按钮事件。
+        _initExtendIcon: function (){
+            var $target = this.$target,
+                $helloworld = $('#HelloWorld', $target),
+                $icon = $('#hIcon', $target);
+            var _this = this,
+                iconList = this.extendIcon;
+            var curList, $cur;
+
+            if (!iconList || !iconList.length){
+                return;
+            }
+
+            //先清空所有的图标
+            $icon.empty();
+
+            for (var i = 0, count = iconList.length; i < count; i++){
+                curList = iconList[i];
+                $cur = $('<div class="h-tool-item h-tool-pic ' + (curList['iconCls'] || '') + '" title="' + curList['name'] + '"></div>').appendTo($icon);
+            }
+
+        },
+
         //获得提示框。该提示框是单例模式，只允许一个提示框显示。
         _getTips: function (){
             
@@ -379,6 +415,9 @@ define(function (require, exports, module){
             }).on('input' + namespace, function (){
                 $(this).trigger('keyboardInput');
             });
+
+            //------------绑定功能键按键-----------
+            this._initExtendIcon();
         },
 
         //拓展
