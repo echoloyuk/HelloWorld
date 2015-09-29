@@ -5,6 +5,8 @@
 
 define(function (require, exports, module){
 
+    "use strict";
+
 	//依赖的模块
 	var MarkdownParser = require('MarkdownParser');
     var TextArea = require('TextArea');
@@ -357,8 +359,9 @@ define(function (require, exports, module){
                 $helloworld = $('#HelloWorld', $target),
                 $icon = $('#hIcon', $target);
             var _this = this,
-                iconList = this.extendIcon;
-            var curList, $cur;
+                iconList = this.extendIcon,
+                namespace = '.HelloWorldIconExtendEvent';
+            var curList, $cur, curCallback;
 
             if (!iconList || !iconList.length){
                 return;
@@ -370,6 +373,14 @@ define(function (require, exports, module){
             for (var i = 0, count = iconList.length; i < count; i++){
                 curList = iconList[i];
                 $cur = $('<div class="h-tool-item h-tool-pic ' + (curList['iconCls'] || '') + '" title="' + curList['name'] + '"></div>').appendTo($icon);
+                curCallback = curList['onClick'];
+
+                //绑定回调
+                if (typeof curCallback === 'function'){
+                    $cur.off().on('click' + namespace, function (){
+                        
+                    });
+                }
             }
 
         },
