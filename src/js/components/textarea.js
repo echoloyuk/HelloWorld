@@ -344,7 +344,19 @@ define(function (require, exports, module){
 					target.selectionEnd = end;
 				}
 			}
-		}
+		},
+
+        //获得选中的位置文字
+        getString: function (start, end){
+            var $target = this.$target,
+                target = this.target,
+                content = $target.val();
+
+            if (!$.isNumeric(start)){
+                return;
+            }
+            return content.substring(start, end);
+        }
 	});
 
 	module.exports = TextArea;

@@ -114,7 +114,7 @@ define(function (require, exports, module){
             $info.html('可以上传');
             return true;
         },
-
+ 
         //显示上传dialog
         _showImgUpLoadDialog: function(){
             var $target = this.$target,
@@ -122,7 +122,7 @@ define(function (require, exports, module){
                 $dialog = _this._getDialog(),
                 namespace = '.HelloWorldUpLoadImgEvent',
                 textarea = _this.textarea,
-                $file, $alt, $submit, $autoClose, $form,
+                $file, $alt, $submit, $autoClose, $form, $link, $info,
                 html = '<div class="h-dialog-ctrl-panel">' +
                             '<div class="h-dialog-title">上传图片</div>' +
                             '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
@@ -151,6 +151,7 @@ define(function (require, exports, module){
                         '</div>';
 
             var pos = textarea.getCursorPosition();
+            console.log(pos);
             textarea.$target.blur(); //需要把输入框的光标去掉。
             
             $dialog.empty().html(html); //增加css
@@ -204,7 +205,6 @@ define(function (require, exports, module){
             //用户体验，当窗口弹出时，支持ESC关闭和ENTER的上传图片
             $(window).off(namespace).on('keyup' + namespace, function (e){
                 var keyCode = e.keyCode;
-                console.log(keyCode);
                 switch (keyCode){
                     case 27: //esc
                         _this._hideImgUpLoadDialog(pos);
@@ -257,6 +257,14 @@ define(function (require, exports, module){
                     str += 'img';
                 }
                 str += '](' + result + ')';
+
+                //在用户点击图标等按钮时，![这两个字是没写上的。所以要加上
+                //console.log(textarea.getString(pos - 2, pos));
+                if (textarea.getString(pos - 2, pos) !== '!['){
+                    str = '![' + str;
+                    st += 2;
+                    en += 2;
+                }
 
                 if (!result){
                     $info.html('上传出现了问题');
@@ -373,16 +381,23 @@ define(function (require, exports, module){
             for (var i = 0, count = iconList.length; i < count; i++){
                 curList = iconList[i];
                 $cur = $('<div class="h-tool-item h-tool-pic ' + (curList['iconCls'] || '') + '" title="' + curList['name'] + '"></div>').appendTo($icon);
-                curCallback = curList['onClick'];
 
                 //绑定回调
-                if (typeof curCallback === 'function'){
-                    $cur.off().on('click' + namespace, function (){
-                        
-                    });
-                }
+                $cur.off(namespace).on('click' + namespace, (function ($cur, curList){
+                    return function (){
+                        var curCallback = curList['onClick'];
+                        if (typeof curCallback === 'function'){
+                            curCallback.call($cur, curList, _this);
+                        }
+                    }
+                })($cur, curList));
             }
 
+        },
+
+        //默认的图片上传方法
+        _defaultIconEvent4Img: function (cur, _this){
+            _this._showImgUpLoadDialog();
         },
 
         //获得提示框。该提示框是单例模式，只允许一个提示框显示。
