@@ -31,6 +31,10 @@ define(function (require, exports, module){
                 name: '插入图片',
                 iconCls: 'h-icon-img',
                 onClick: this._defaultIconEvent4Img
+            },{
+                name: '插入链接',
+                iconCls: 'h-icon-link',
+                onClick: this._defaultIconEvent4Link
             }
         ]; 
         /*
@@ -256,6 +260,47 @@ define(function (require, exports, module){
 
         },
 
+        //显示链接窗口
+        _showLinkDialog: function (){
+            var $target = this.$target,
+                _this = this,
+                $dialog = _this._getDialog(),
+                namespace = '.HelloWorldLinkUrlEvent',
+                textarea = _this.textarea,
+                html = '<div class="h-dialog-ctrl-panel">' +
+                            '<div class="h-dialog-title">发布链接</div>' +
+                            '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
+                        '</div>' +
+                        '<div class="h-dialog-form">' +
+                            '<div class="h-dialog-input">' +
+                                '<span>名称：</span>' +
+                                '<input type="text" id="hLinkName" class="h-dialog-text" />' +
+                            '</div>' +
+                            '<div class="h-dialog-input">' +
+                                '<span>地址：</span>' +
+                                '<input type="text" id="hLinkUrl" class="h-dialog-text" />' +
+                            '</div>' +
+                            '<div class="h-dialog-btn" id="hLinkSubmitBtn">确定</div>' +
+                        '</div>';
+            var $name, $url, $autoClose;
+            var pos = textarea.getCursorPosition();
+
+            $dialog.empty().html(html); //增加css
+            _this._showDialog(); //显示
+
+            $name = $('#hLinkName', $dialog);
+            $url = $('#hLinkUrl', $dialog);
+            $autoClose = $('#hDialogCloseBtn', $dialog);
+
+            textarea.$target.blur(); //需要把输入框的光标去掉。
+
+            //右上角自动关闭的按钮
+            $autoClose.off(namespace).on('click' + namespace, function (){
+                _this._hideLinkDialog(pos);
+            });
+            
+        },
+
         //内部回调。上传文件过程的回调函数。
         _onUpLoadImgProgress: function (_this){
             return function (e){
@@ -304,6 +349,22 @@ define(function (require, exports, module){
                 namespace = '.HelloWorldUpLoadImgEvent';
             var textarea = _this.textarea;
             
+            _this._hideDialog();
+
+            if (pos && $.isNumeric(pos)){
+                textarea.setPosition(pos);
+            }
+
+            $(window).off(namespace);
+        },
+
+        //关闭上传链接的窗口
+        _hideLinkDialog: function (pos){
+            var $target = this.$target,
+                _this = this,
+                namespace = '.HelloWorldLinkUrlEvent';
+            var textarea = _this.textarea;
+
             _this._hideDialog();
 
             if (pos && $.isNumeric(pos)){
@@ -407,6 +468,11 @@ define(function (require, exports, module){
         //默认的图片上传方法
         _defaultIconEvent4Img: function (cur, _this){
             _this._showImgUpLoadDialog();
+        },
+
+        //默认的链接上传方法
+        _defaultIconEvent4Link: function (cur, _this){
+            _this._showLinkDialog();
         },
 
         //获得提示框。该提示框是单例模式，只允许一个提示框显示。
