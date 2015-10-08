@@ -96,6 +96,9 @@ define(function (require, exports, module){
         //验证上传图片是否正确
         _checkUpLoadImg: function ($file){
             var file = $file.get(0).files[0];
+            if (!file){
+                return false;
+            }
             var size = Math.floor(file.size / 1024),
                 type = file.type,
                 maxSize = this.imgMaxSize;
@@ -113,6 +116,42 @@ define(function (require, exports, module){
             }
             $info.html('可以上传');
             return true;
+        },
+
+        //插入图片链接的方法
+        _insertImgString: function (url, alt, pos){
+            var $target = this.$target,
+                $dialog = this._getDialog(),
+                $info = $('#hImgUpLoadInfo', $dialog),
+                textarea = this.textarea,
+                result = url
+
+            // ![alg](http://www.baidu.com)
+            var st = -1, en, str = '';
+            if (alt){
+                en = st = alt.length + result.length + 2;
+                str += alt
+            } else {
+                en = 2;
+                str += 'img';
+            }
+            str += '](' + result + ')';
+
+            //在用户点击图标等按钮时，![这两个字是没写上的。所以要加上
+            //console.log(textarea.getString(pos - 2, pos));
+            if (textarea.getString(pos - 2, pos) !== '!['){
+                str = '![' + str;
+                st += 2;
+                en += 2;
+            }
+
+            if (!result){
+                $info.html('上传出现了问题');
+            } else {
+                textarea.replaceStr(pos, pos, str, true, st, en);
+            }
+
+            this._hideImgUpLoadDialog();
         },
  
         //显示上传dialog
@@ -151,7 +190,7 @@ define(function (require, exports, module){
                         '</div>';
 
             var pos = textarea.getCursorPosition();
-            console.log(pos);
+            var linkStr = ''
             textarea.$target.blur(); //需要把输入框的光标去掉。
             
             $dialog.empty().html(html); //增加css
@@ -198,7 +237,7 @@ define(function (require, exports, module){
                         processData:false
                     });
                 } else { //直接写link
-
+                    _this._insertImgString($link.val(), ($alt.val() || ''), pos);
                 }
             });
 
@@ -242,39 +281,9 @@ define(function (require, exports, module){
             return function (e){
                 var $target = _this.$target,
                     $dialog = _this._getDialog(),
-                    alt = $('#hImgAlt', $dialog).val(),
-                    $info = $('#hImgUpLoadInfo', $dialog),
-                    textarea = _this.textarea,
-                    result = e.target.responseText;
+                    alt = $('#hImgAlt', $dialog).val();
 
-                // ![alg](http://www.baidu.com)
-                var st = -1, en, str = '';
-                if (alt){
-                    en = st = alt.length + result.length + 2;
-                    str += alt
-                } else {
-                    en = 2;
-                    str += 'img';
-                }
-                str += '](' + result + ')';
-
-                //在用户点击图标等按钮时，![这两个字是没写上的。所以要加上
-                //console.log(textarea.getString(pos - 2, pos));
-                if (textarea.getString(pos - 2, pos) !== '!['){
-                    str = '![' + str;
-                    st += 2;
-                    en += 2;
-                }
-
-                if (!result){
-                    $info.html('上传出现了问题');
-                } else {
-                    textarea.replaceStr(pos, pos, str, true, st, en);
-                }
-
-                _this._hideImgUpLoadDialog();
-
-
+                _this._insertImgString(e.target.responseText, alt, pos);
             }
         },
 
