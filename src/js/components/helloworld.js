@@ -281,8 +281,9 @@ define(function (require, exports, module){
                                 '<input type="text" id="hLinkUrl" class="h-dialog-text" />' +
                             '</div>' +
                             '<div class="h-dialog-btn" id="hLinkSubmitBtn">确定</div>' +
-                        '</div>';
-            var $name, $url, $autoClose;
+                        '</div>' +
+                        '<div class="h-dialog-info" id="hLinkInfo"></div>';
+            var $name, $url, $autoClose, $btn, $info;
             var pos = textarea.getCursorPosition();
 
             $dialog.empty().html(html); //增加css
@@ -290,13 +291,49 @@ define(function (require, exports, module){
 
             $name = $('#hLinkName', $dialog);
             $url = $('#hLinkUrl', $dialog);
+            $btn = $('#hLinkSubmitBtn', $dialog);
             $autoClose = $('#hDialogCloseBtn', $dialog);
+            $info = $('#hLinkInfo', $dialog);
 
             textarea.$target.blur(); //需要把输入框的光标去掉。
+            $name.focus();
 
             //右上角自动关闭的按钮
             $autoClose.off(namespace).on('click' + namespace, function (){
                 _this._hideLinkDialog(pos);
+            });
+
+            $btn.off(namespace).on('click' + namespace, function (){
+                var url = $url.val(),
+                    name = $name.val();
+
+                var urlStr = '[';
+                //验证url是否有效
+                if (!url){
+                    $info.html('请输入有效的url地址');
+                    return;
+                }
+
+                //[name](url)
+                urlStr += (name ? name : 'link') + '](' + url + ')';
+                textarea.replaceStr(pos, pos, urlStr);
+
+                _this._hideLinkDialog((pos + urlStr.length));
+            });
+
+            //用户体验，当显示链接窗口时，按ESC就可以关闭
+            $(window).off(namespace).on('keyup' + namespace, function (e){
+                var keyCode = e.keyCode;
+                switch (keyCode){
+                    case 27: 
+                        _this._hideLinkDialog(pos);
+                        break;
+                    case 13:
+                        $btn.trigger('click');
+                        break;
+                    default:
+                        break;
+                }
             });
             
         },
