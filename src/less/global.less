@@ -1,5 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
+@font:"lucida grande", "Microsoft YaHei", sans-serif;
 
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -23,7 +24,7 @@ html{
 
 body{
 	font-size:12px;
-	font-family:'lucida grande',Helvetica,Tahoma,Verdana,Microsoft YaHei,Arial,simsun,sans-serif;
+	font-family:@font;
 	border:none;
 }
 
@@ -65,7 +66,7 @@ input, button, textarea, select, optgroup, option {
 	font-weight: inherit;
 }
 select, label, textarea, input {
-	font-family:'lucida grande',Helvetica,Tahoma,Verdana,Microsoft YaHei,Arial,simsun,sans-serif;
+	font-family:@font;
 }
 article, aside, dialog, figure, footer, header, hgroup, menu, nav, section, time, mark, audio, video, details, summary { 
 	background: none repeat scroll 0 0 transparent;

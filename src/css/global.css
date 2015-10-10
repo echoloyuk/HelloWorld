@@ -57,7 +57,7 @@ html {
 }
 body {
   font-size: 12px;
-  font-family: 'lucida grande', Helvetica, Tahoma, Verdana, Microsoft YaHei, Arial, simsun, sans-serif;
+  font-family: "lucida grande", "Microsoft YaHei", sans-serif;
   border: none;
 }
 table {
@@ -114,7 +114,7 @@ select,
 label,
 textarea,
 input {
-  font-family: 'lucida grande', Helvetica, Tahoma, Verdana, Microsoft YaHei, Arial, simsun, sans-serif;
+  font-family: "lucida grande", "Microsoft YaHei", sans-serif;
 }
 article,
 aside,
