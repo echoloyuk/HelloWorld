@@ -36,7 +36,8 @@ define(function (require, exports, module){
                 iconCls: 'h-icon-link',
                 onClick: this._defaultIconEvent4Link
             }
-        ]; 
+        ];
+        this.autoSave = 30 * 1000; //默认半分钟
         /*
         图标格式：
         extendIcon = [
@@ -45,6 +46,14 @@ define(function (require, exports, module){
             onClick: function (){}, //图标点击的回调函数
         ]    
         */
+
+        //用于本地存储标题和文本内容
+        //title为标题，content为文字。
+        this._cache = null;
+        if (window.localStorage){
+            this._cache = window.localStorage;
+        }
+
 
         if ($target instanceof jQuery){
             this.$target = $target;
@@ -70,6 +79,7 @@ define(function (require, exports, module){
                     '<div class="h-content-panel">' +
                         '<textarea class="h-content" id="hContent" placeholder="在这里输入正文"></textarea>' +
                     '</div>' +
+                    '<div class="h-info-panel" id="hInfo">HelloWorld :)</div>' +
                 '</div>' +
                 '<div class="h-preview" id="hPreview">' +
                     '<div class="h-text-content-title">在这里输入标题</div>' +
@@ -528,11 +538,12 @@ define(function (require, exports, module){
                 $title, $textarea;
             var namespace = '.HelloWorldTitleEvent';
             var _this = this;
+            var _cache, _cacheTitle, _cacheContent;
 
             //生成主体html
             this._createMainHTML();
 
-            $title = $('#hTitle', $target),
+            $title = $('#hTitle', $target);
             $textarea = $('#hContent', $target);
 
             //初始化textarea
@@ -556,11 +567,78 @@ define(function (require, exports, module){
 
             //------------绑定功能键按键-----------
             this._initExtendIcon();
+
+            //-------------文本内容---------------
+            if (!this._cache){
+                return;
+            }
+            _cache = this._cache;
+            if (_cache['HelloWorldTitle']){
+                $title.val(_cache['HelloWorldTitle']);
+            }
+            if (_cache['HelloWorldContent']){
+                $textarea.val(_cache['HelloWorldContent']);
+            }
+            this._toPreview();
+
+            //定时保存文本内容
+            if (!this.autoSave){
+                return;
+            }
+            setInterval(function autoSave(){
+                _this.saveEditor();
+            }, this.autoSave);
+
         },
 
         //拓展
         extend: function (obj){
             $.extend(this, obj);
+        },
+
+        //设置状态消息
+        setInfo: function (str){
+            var $target = this.$target,
+                $info = $('#hInfo', $target);
+
+            $info.html(str);
+        },
+
+        //将文本保存至cache中
+        saveContext: function (){
+            var $target = this.$target,
+                $title = $('#hTitle', $target),
+                $textarea = $('#hContent', $target);
+            var _cache = this._cache;
+            var str = '';
+            if (!_cache){
+                return false;
+            }
+            _cache['HelloWorldTitle'] = $title.val();
+            _cache['HelloWorldContent'] = $textarea.val();
+            return true;
+        },
+
+        //保存编辑器文本
+        saveEditor: function (){
+            var $target = this.$target,
+                $info = $('#hInfo', $target);
+            var str = '', 
+                now = new Date,
+                y = now.getFullYear(),
+                m = now.getMonth() + 1,
+                d = now.getDate(),
+                h = now.getHours(),
+                mi = now.getMinutes(),
+                s = now.getSeconds();
+            if (this.saveContext()){
+                str += '内容临时保存成功，保存时间：';
+                str += y + '/' + m + '/' + d + ' ';
+                str += (h > 9 ? h : '0' + h) + ':' + (mi > 9 ? mi : '0' + mi) + ':' + (s > 9 ? s : '0' + s);
+            } else {
+                str += '不能临时保存，保存失败';
+            }
+            $info.html(str);
         }
     });
 
