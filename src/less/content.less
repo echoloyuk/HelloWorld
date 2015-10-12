@@ -1,5 +1,7 @@
 /* Hello World Editor style sheet */
 /* HelloWorld样式文件 */
+@font: "Consolas", "Courier New", "Inconsolata", "Menlo", monospace;
+
 .h-text-content{
     font: 400 18px/1.82 "Microsoft YaHei", "SimSun", sans-serif;
     color: #333332;
@@ -98,11 +100,11 @@
     code, tt{
         color: #808080;
         font-size: 0.96em;
-        background-color: #f9f9f7;
+        background-color: #f4f8ee;
         padding: 1px 2px;
         border: 1px solid #dadada;
         border-radius: 3px;
-        font-family: "Courier New", "Inconsolata", "Menlo", monospace;
+        font-family: @font;
     }
     pre {
         padding: 7px;
@@ -111,9 +113,9 @@
         overflow: auto;
         line-height: 1.5;
         font-size: 0.96em;
-        font-family: "Inconsolata", "Menlo", monospace;
+        font-family: @font;
         color: #4c4c4c;
-        background-color: #f9f9f7;
+        background-color: #f4f8ee;
     }
     pre code,pre tt {
         color: #4c4c4c;

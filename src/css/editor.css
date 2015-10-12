@@ -1,5 +1,14 @@
 /* Hello World Editor style sheet */
 /* functional less */
+/* 工具栏图标 */
+@font-face {
+  font-family: 'HelloWorldIconFont';
+  src: url('../font/fontello.eot');
+  src: url('../font/fontello.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../font/fontello.woff') format('woff'), /* chrome、firefox */ url('../font/fontello.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('../font/fontello.svg#iconfont') format('svg');
+  
+  /* IE9*/
+  /* iOS 4.1- */
+}
 /* stylesheet */
 .h-outer {
   background-color: #ffffff;
@@ -16,11 +25,10 @@
   bottom: 0;
   left: 0;
   z-index: 100;
-  background-color: #ffffff;
   box-shadow: 0 0 6px #333;
 }
 .h-outer .h-textarea .h-title-panel {
-  padding: 10px 20px;
+  padding: 10px 30px;
   height: 80px;
   background-color: #f7f7f7;
   box-sizing: border-box;
@@ -29,22 +37,39 @@
   height: 60px;
   width: 100%;
   line-height: 60px;
-  font-size: 3em;
+  font-size: 2.6em;
   background-color: #f7f7f7;
   border: none;
+  outline: none;
 }
 .h-outer .h-textarea .h-tool-panel {
   height: 30px;
   background-color: #dedede;
-  padding: 0 20px;
+  padding: 0 30px;
 }
 .h-outer .h-textarea .h-tool-panel .h-tool-item {
   float: left;
   height: 30px;
   width: 30px;
   cursor: pointer;
-  border: 1px solid red;
   box-sizing: border-box;
+  text-align: center;
+  margin-right: 6px;
+}
+.h-outer .h-textarea .h-tool-panel .h-tool-item:hover {
+  color: #999;
+}
+.h-outer .h-textarea .h-tool-panel .h-tool-item.h-icon-img::before {
+  font-family: 'HelloWorldIconFont';
+  content: '\E800';
+  font-size: 20px;
+  line-height: 30px;
+}
+.h-outer .h-textarea .h-tool-panel .h-tool-item.h-icon-link::before {
+  font-family: 'HelloWorldIconFont';
+  content: '\E801';
+  font-size: 20px;
+  line-height: 30px;
 }
 .h-outer .h-textarea .h-content-panel {
   position: absolute;
@@ -53,7 +78,7 @@
   right: 0px;
   bottom: 30px;
   background-color: #f7f7f7;
-  padding: 20px;
+  padding: 30px;
 }
 .h-outer .h-textarea .h-content-panel .h-content {
   border: none;
@@ -62,7 +87,7 @@
   background-color: #f7f7f7;
   font-family: "Consolas", "Courier New";
   font-size: 1.4em;
-  line-height: 1.3em;
+  line-height: 1.4em;
   outline: none;
   resize: none;
 }
@@ -73,7 +98,7 @@
   right: 0;
   height: 30px;
   line-height: 30px;
-  background-color: #eff;
+  background-color: #dedede;
   padding: 0 20px;
 }
 .h-outer .h-preview {
@@ -83,7 +108,7 @@
   bottom: 0;
   left: 60%;
   background-color: #ffffff;
-  padding: 20px;
+  padding: 30px;
   overflow: auto;
 }
 .h-outer .h-preview .h-text-content-title {

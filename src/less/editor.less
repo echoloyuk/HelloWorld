@@ -1,15 +1,25 @@
 /* Hello World Editor style sheet */
 @outer-bg:#fff; //编辑器背景颜色
-@textarea-bg:#fff; //文本编辑的背景颜色
 @title-bg:#f7f7f7; //文本编辑器标题背景颜色
 @tool-bg:#dedede; //文本编辑器工具栏背景颜色
 @content-bg:#f7f7f7; //正文文本编辑器的背景颜色
 @preview-bg:#fff; //预览背景颜色
+@info-bg:#dedede; //文本编辑器下方的状态栏的背景颜色
 @p-border:#414141; //预览与编辑器之间的边线颜色
 
 @font: "Consolas", "Courier New"; //textarea字体
 
 @import "function.less"; //工具样式
+
+/* 工具栏图标 */
+@font-face{
+    font-family: 'HelloWorldIconFont';
+    src: url('../font/fontello.eot'); /* IE9*/
+    src: url('../font/fontello.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../font/fontello.woff') format('woff'), /* chrome、firefox */
+    url('../font/fontello.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('../font/fontello.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
 
 /* stylesheet */
 .h-outer{
@@ -27,11 +37,10 @@
         bottom:0;
         left:0;
         z-index:100;
-        background-color:@textarea-bg;
         box-shadow: 0 0 6px #333;
 
         .h-title-panel{
-            padding:10px 20px;
+            padding:10px 30px;
             height:80px;
             background-color:@title-bg;
             box-sizing:border-box;
@@ -40,25 +49,43 @@
                 height:60px;
                 width:100%;
                 line-height:60px;
-                font-size:3em;
+                font-size:2.6em;
                 background-color: @title-bg;
                 border:none;
+                outline: none;
             }
 
         }
         .h-tool-panel{
             height:30px;
             background-color:@tool-bg;
-            padding:0 20px;
+            padding:0 30px;
             
             .h-tool-item{
                 float:left;
                 height:30px;
                 width:30px;
                 cursor:pointer;
-                border:1px solid red;
                 box-sizing:border-box;
-                
+                text-align: center;
+                margin-right: 6px;
+    
+                &:hover{
+                    color: #999;
+                }
+
+                &.h-icon-img::before{
+                    font-family: 'HelloWorldIconFont';
+                    content: '\E800';
+                    font-size: 20px;
+                    line-height: 30px;
+                }
+                &.h-icon-link::before{
+                    font-family: 'HelloWorldIconFont';
+                    content: '\E801';
+                    font-size: 20px;
+                    line-height: 30px;
+                }
             }
         }
 
@@ -69,7 +96,7 @@
             right:0px;
             bottom:30px;
             background-color:@content-bg;
-            padding:20px;
+            padding:30px;
 
             .h-content{
                 border:none;
@@ -78,7 +105,7 @@
                 background-color:@content-bg;
                 font-family:@font;
                 font-size:1.4em;
-                line-height:1.3em;
+                line-height:1.4em;
                 outline:none;
                 resize:none;
             }
@@ -91,7 +118,7 @@
             right:0;
             height:30px;
             line-height:30px;
-            background-color:#eff;
+            background-color:@info-bg;
             padding:0 20px;
         }
 
@@ -103,7 +130,7 @@
         bottom:0;
         left:60%;
         background-color:@preview-bg;
-        padding:20px;
+        padding:30px;
         overflow:auto;
 
         .h-text-content-title{

@@ -107,11 +107,11 @@
 .h-text-content tt {
   color: #808080;
   font-size: 0.96em;
-  background-color: #f9f9f7;
+  background-color: #f4f8ee;
   padding: 1px 2px;
   border: 1px solid #dadada;
   border-radius: 3px;
-  font-family: "Courier New", "Inconsolata", "Menlo", monospace;
+  font-family: "Consolas", "Courier New", "Inconsolata", "Menlo", monospace;
 }
 .h-text-content pre {
   padding: 7px;
@@ -120,9 +120,9 @@
   overflow: auto;
   line-height: 1.5;
   font-size: 0.96em;
-  font-family: "Inconsolata", "Menlo", monospace;
+  font-family: "Consolas", "Courier New", "Inconsolata", "Menlo", monospace;
   color: #4c4c4c;
-  background-color: #f9f9f7;
+  background-color: #f4f8ee;
 }
 .h-text-content pre code,
 .h-text-content pre tt {
