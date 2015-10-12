@@ -28,6 +28,7 @@
         left:0;
         z-index:100;
         background-color:@textarea-bg;
+        box-shadow: 0 0 6px #333;
 
         .h-title-panel{
             padding:10px 20px;
@@ -39,14 +40,13 @@
                 height:60px;
                 width:100%;
                 line-height:60px;
-                font-size:32px;
+                font-size:3em;
                 background-color: @title-bg;
                 border:none;
             }
 
         }
         .h-tool-panel{
-            border-bottom:1px solid @p-border;
             height:30px;
             background-color:@tool-bg;
             padding:0 20px;
@@ -69,7 +69,7 @@
             right:0px;
             bottom:30px;
             background-color:@content-bg;
-            padding:10px 20px;
+            padding:20px;
 
             .h-content{
                 border:none;
@@ -78,7 +78,7 @@
                 background-color:@content-bg;
                 font-family:@font;
                 font-size:1.4em;
-                line-height:1.2em;
+                line-height:1.3em;
                 outline:none;
                 resize:none;
             }
@@ -103,7 +103,6 @@
         bottom:0;
         left:60%;
         background-color:@preview-bg;
-        border-left:1px solid @p-border;
         padding:20px;
         overflow:auto;
 
@@ -113,7 +112,7 @@
             line-height:1.2em;
         }
         .h-text-content{
-            border-top:1px solid #666;
+            border-top:1px solid #ccc;
             margin-top:20px;
             padding:20px 0;
             position: relative;

@@ -531,7 +531,7 @@ define(function (require, exports, module){
             }
             if (flag){
                 $prev.stop().animate({
-                    scrollTop: top - 100
+                    scrollTop: top - 100 //-100的原因是距离上边距保持100px的距离
                 }, 200);
             } else {
                 $prev.stop().animate({
