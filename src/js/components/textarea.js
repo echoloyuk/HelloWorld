@@ -356,6 +356,31 @@ define(function (require, exports, module){
                 return;
             }
             return content.substring(start, end);
+        },
+
+        //获得整行的文字
+        getStringLine: function (pos){
+            var $target = this.$target,
+                target = this.target,
+                content = $target.val();
+            if (!$.isNumeric(pos)){
+                return;
+            }
+
+            //pos得到的是光标位置的后面的一个字。所以要向前移
+            var start = content.lastIndexOf('\n', pos - 1),
+                end = content.indexOf('\n', pos),
+                strL;
+
+            if (start < 0){
+                start = 0;
+            }
+            if (end < 0){
+                end = content.length;
+            }
+            strL = content.substring(start, end);
+            strL = $.trim(strL);
+            return strL;
         }
 	});
 

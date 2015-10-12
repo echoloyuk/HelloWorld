@@ -2,7 +2,7 @@
 /* functional less */
 /* stylesheet */
 .h-outer {
-  background-color: #efefef;
+  background-color: #ffffff;
   position: absolute;
   top: 0;
   left: 0;
@@ -16,12 +16,12 @@
   bottom: 0;
   left: 0;
   z-index: 100;
-  background-color: #efefef;
+  background-color: #ffffff;
 }
 .h-outer .h-textarea .h-title-panel {
   padding: 10px 20px;
   height: 80px;
-  background-color: #f1f1f1;
+  background-color: #f7f7f7;
   box-sizing: border-box;
 }
 .h-outer .h-textarea .h-title-panel .h-title {
@@ -29,7 +29,7 @@
   width: 100%;
   line-height: 60px;
   font-size: 32px;
-  background-color: #f1f1f1;
+  background-color: #f7f7f7;
   border: none;
 }
 .h-outer .h-textarea .h-tool-panel {
@@ -52,14 +52,14 @@
   left: 0px;
   right: 0px;
   bottom: 30px;
-  background-color: #f1f1f1;
+  background-color: #f7f7f7;
   padding: 10px 20px;
 }
 .h-outer .h-textarea .h-content-panel .h-content {
   border: none;
   width: 100%;
   height: 100%;
-  background-color: #f1f1f1;
+  background-color: #f7f7f7;
   font-family: "Consolas", "Courier New";
   font-size: 1.4em;
   line-height: 1.2em;

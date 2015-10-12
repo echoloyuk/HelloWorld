@@ -509,7 +509,35 @@ define(function (require, exports, module){
                     }
                 })($cur, curList));
             }
+        },
 
+        //右侧的预览时区位置
+        _scrollPrev: function (str){
+            var $target = this.$target,
+                $helloworld = $('#HelloWorld', $target),
+                $prev = $('#hPreview', $target),
+                $text = $('.h-text-content', $prev);
+            var $t, flag = false, top;
+            if (str) {
+                str = str.replace(/^[#^*>!]{1,}/g, '');
+                str = $.trim(str);
+                if ('' !== str){
+                    $t = $prev.find('.h-text-content *:contains("' + str + '")');
+                    if ($t.length){
+                        flag = true;
+                        top = $t.eq(0).position().top;
+                    }
+                }
+            }
+            if (flag){
+                $prev.stop().animate({
+                    scrollTop: top - 100
+                }, 200);
+            } else {
+                $prev.stop().animate({
+                    scrollTop: $('.h-text-content', $prev).height()
+                }, 200);
+            }
         },
 
         //默认的图片上传方法
@@ -561,8 +589,20 @@ define(function (require, exports, module){
             //绑定content事件
             $textarea.off(namespace).on('keyboardInput', function (){
                 _this._toPreview();
+            }).on('scrollPrev' + namespace, function (){
+                var pos = _this.textarea.getCursorPosition();
+                if ($.isNumeric(pos)){
+                    var str = _this.textarea.getStringLine(pos);
+                    _this._scrollPrev(str);
+                }
             }).on('input' + namespace, function (){
                 $(this).trigger('keyboardInput');
+
+            //输入的时候用于计算它对应右侧的位置
+            }).on('input' + namespace, function (){
+                $(this).trigger('scrollPrev');
+            }).on('click' + namespace, function (){
+                $(this).trigger('scrollPrev');
             });
 
             //------------绑定功能键按键-----------
