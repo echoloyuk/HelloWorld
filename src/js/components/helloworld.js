@@ -86,6 +86,7 @@ define(function (require, exports, module){
                     '<div class="h-text-content">' +
                     '</div>' +
                 '</div>' +
+                '<div class="h-masker" id="hMask"><div>'
             '</div>';
             var $html = $('#' + id, $target);
 
@@ -459,10 +460,12 @@ define(function (require, exports, module){
         _showDialog: function (){
             var $target = this.$target,
                 $dialog = this._getDialog(),
-                $helloworld = $('#HelloWorld', $target);
+                $helloworld = $('#HelloWorld', $target),
+                $mask = $('#hMask', $target);
 
             $helloworld.addClass('h-masked');
-            $dialog.show();
+            $mask.show();
+            $dialog.stop().fadeIn(100);
 
             //显示在最中央
             Util.toDIVCenter($dialog);
@@ -472,10 +475,12 @@ define(function (require, exports, module){
         _hideDialog: function (){
             var $target = this.$target,
                 $dialog = this._getDialog(),
-                $helloworld = $('#HelloWorld', $target);
+                $helloworld = $('#HelloWorld', $target),
+                $mask = $('#hMask', $target);
 
             $helloworld.removeClass('h-masked');
-            $dialog.hide();
+            $mask.hide();
+            $dialog.stop().fadeOut(100);
         },
 
         //绑定拓展的按钮事件。
