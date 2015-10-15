@@ -161,26 +161,29 @@
     top:0;
     bottom:0;
     z-index:999;
-    opacity:0.7;
+    opacity:0.5;
     background-color: #000;
     display: none;
 }
 .h-dialog{
     position:absolute;
-    width:300px;
-    height:200px;
+    width:500px;
+    height:320px;
     background-color:#fff;
-    border:1px solid blue;
+    box-shadow: 0 0 12px #000;
     z-index: 1000;
     display: none;
-    box-shadow:0 0 3px;
+    border-radius: 4px;
 
     .h-dialog-ctrl-panel{
-        font-size:13px;
+        font-size:14px;
         position:relative;
-        line-height:2em;
-        border-bottom: 1px solid red;
-        padding:0 4px;
+        line-height:40px;
+        height: 40px;
+        padding:0 20px;
+        background-color:#646464;
+        color:#fff;
+        border-radius: 4px 4px 0 0;
 
         .h-dialog-title{
             font-weight:bold;
@@ -188,14 +191,58 @@
 
         .h-dialog-ctrl-btn{
             position:absolute;
-            right:4px;
-            top:4px;
-            width:12px;
-            height:12px;
-            line-height:12px;
-            text-align:center;
-            border:1px solid green;
+            right:20px;
+            top:10px;
+            width:20px;
+            height:20px;
             cursor:pointer;
+
+            &::before{
+                font-family: 'HelloWorldIconFont';
+                content: '\E802';
+                font-size: 14px;
+                line-height: 20px;
+                width:20px;
+                height:20px;
+                text-align:right;
+                position:absolute;
+                top:0;
+                left: 0;
+            }
+
+            &:hover{
+                color:#ccc;
+            }
+        }
+    }
+    .h-dialog-form-panel{
+        padding:20px;
+
+        .h-dialog-input{
+            line-height: 2em;
+            padding:0 0 20px;
+
+            .h-dialog-text{
+                border: 1px solid #ccc;
+                height: 26px;
+                line-height: 26px;
+                font-size: 16px;
+                min-width: 300px;
+                vertical-align: middle;
+                outline: none;
+            }
+            .h-dialog-upfile{
+                vertical-align: middle;
+                max-width: 400px;
+                min-width: 300px;
+                overflow: hidden;
+                border:1px solid #ccc;
+                outline: none;
+            }
+        }
+        .h-dialog-info{
+            padding: 20px 0 10px;
+            line-height:2em;
         }
     }
 

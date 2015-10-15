@@ -179,18 +179,16 @@ define(function (require, exports, module){
                 $file, $alt, $submit, $autoClose, $form, $link, $info,
                 html = '<div class="h-dialog-ctrl-panel">' +
                             '<div class="h-dialog-title">上传图片</div>' +
-                            '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
+                            '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn"></div>' +
                         '</div>' +
-                        '<div class="h-dialog-form">' +
+                        '<div class="h-dialog-form-panel">' +
                             '<form id="imgUploadForm" enctype="multipart/form-data" method="post">' +
                                 '<div class="h-dialog-input">' +
                                     '<span>图片：</span>' +
                                     '<input type="file" name="hImgUpLoadInput" id="hImgUpLoadInput" class="h-dialog-upfile" multiple/>' +
-                                '</div>' +
-                                '或' +
-                                '<div class="h-dialog-input">' +
+                                    '<br>或<br>' + 
                                     '<span>网址：</span>' +
-                                    '<input type="text" name="hImgLinkInput" id="hImgLinkInput"/>' +
+                                    '<input type="text" name="hImgLinkInput" id="hImgLinkInput" class="h-dialog-text"/>' +
                                 '</div>' +
                                 '<div class="h-dialog-input">' +
                                     '<span>标题：</span>' +
@@ -280,9 +278,9 @@ define(function (require, exports, module){
                 textarea = _this.textarea,
                 html = '<div class="h-dialog-ctrl-panel">' +
                             '<div class="h-dialog-title">发布链接</div>' +
-                            '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn">×</div>' +
+                            '<div class="h-dialog-ctrl-btn" id="hDialogCloseBtn"></div>' +
                         '</div>' +
-                        '<div class="h-dialog-form">' +
+                        '<div class="h-dialog-form-panel">' +
                             '<div class="h-dialog-input">' +
                                 '<span>名称：</span>' +
                                 '<input type="text" id="hLinkName" class="h-dialog-text" />' +
