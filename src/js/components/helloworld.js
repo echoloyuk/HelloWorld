@@ -290,8 +290,8 @@ define(function (require, exports, module){
                                 '<input type="text" id="hLinkUrl" class="h-dialog-text" />' +
                             '</div>' +
                             '<div class="h-dialog-btn" id="hLinkSubmitBtn">确定</div>' +
-                        '</div>' +
-                        '<div class="h-dialog-info" id="hLinkInfo"></div>';
+                            '<div class="h-dialog-info" id="hLinkInfo"></div>' +
+                        '</div>';
             var $name, $url, $autoClose, $btn, $info;
             var pos = textarea.getCursorPosition();
 
