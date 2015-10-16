@@ -55,9 +55,11 @@
   box-sizing: border-box;
   text-align: center;
   margin-right: 6px;
+  transition: all .2s;
 }
 .h-outer .h-textarea .h-tool-panel .h-tool-item:hover {
   color: #999;
+  text-shadow: 0 0 2px #999;
 }
 .h-outer .h-textarea .h-tool-panel .h-tool-item.h-icon-img::before {
   font-family: 'HelloWorldIconFont';
@@ -211,30 +213,37 @@
   outline: none;
 }
 .h-dialog .h-dialog-form-panel .h-dialog-info {
-  padding: 20px 0 10px;
+  padding: 10px 0 10px;
   line-height: 2em;
 }
 .h-dialog .h-dialog-btn {
   font-size: 13px;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 20px;
   display: inline-block;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid red;
-  padding: 2px 10px;
   cursor: pointer;
-  background-color: #fff;
+  background-color: #b2b2b2;
+  transition: all .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
 }
 .h-dialog .h-dialog-btn:hover {
-  background-color: #eee;
+  background-color: #d6d6d6;
 }
 .h-dialog .h-dialog-btn:active {
-  background-color: #ccc;
+  background-color: #aaa;
 }
 .h-dialog .h-dialog-upload-percentage {
   height: 4px;
   background-color: #ccc;
   padding: 0;
-  margin: 8px 0;
+  margin: 8px 0 16px;
   position: relative;
 }
 .h-dialog .h-dialog-upload-percentage .h-dialog-upload-inner {
