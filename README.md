@@ -1,20 +1,15 @@
 # HelloWorld
-This is my first self-project in GitHub
 
-这是一个非常简单的个人项目，我就是在上面一试
+记得程序员开始新的技术之旅的时候，一般是以HelloWorld作为TA的第一个成品实验。
+这个新的世界将会成为TA未来的职业或生活的一部分。HelloWorld成为了一种文化。
 
-# 关于HelloWorld
+你有没有想过尝试另外一种输入方式呢？想象一下你的编辑器如果只通过键盘来操作是不是很酷？
+没错，Markdown语法编辑器会实现你的这个要求。一个简单的textarea，可以完成一切可以看到的基本文字。
 
-这是一个非常简单的Demo原型，你可以直接在目录下的index.html用Chrome或FireFox打开。
-左侧就是标题和正文的输入部分，右侧就是markdown编译后的预览。
+HelloWorld诞生了！它是一个文本编辑器，带有几个简化的不能再简化的按钮，大部分的地方，是留给你写字的。
+当然，你会发现，当你使用HelloWorld写文章时，右侧同时还有适时的预览。
 
-在未来，它有可能成为文艺的码农写blog的重要东东呦
+![img1](./doc/images/img1.png)
 
-## 记录
-在安装GitHub for windows后，通过本地上传，有一个地方需要记录，那就是如果是在需要代理的网络，
-需要设置代理地址
-````
-$ git config --global http.proxy "代理的地址:端口"
-````
 
 
