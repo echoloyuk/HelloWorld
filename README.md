@@ -11,5 +11,10 @@ HelloWorld诞生了！它是一个文本编辑器，带有几个简化的不能�
 
 ![img1](./doc/images/img1.png)
 
+HelloWorld有
+
+* 引入Marked作为markdown语法的解析器，这是目前bug最少的解析器。
+* 一个Textarea搞定所有事情。tab键缩进，整行缩进。支持`![`唤出图片加载窗口。
+* 所写即所现。您的markdown文章可以立刻看到效果。
 
 
