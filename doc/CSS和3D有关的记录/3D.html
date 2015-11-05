@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test3D</title>
+<style type="text/css">
+.panel{
+    perspective:800px; /* 用于父页面，这个属性决定了在这个容器里面，将可以进行3D透视变化。800px是指，3D的原点距离观察者的距离 */
+    perspective-orgin: 500px 400px; /*3d变幻的中心点位置*/
+
+    width:1000px;
+    height:500px;
+    overflow:hidden;
+
+    border:1px solid red;
+}
+.panel-inner{
+    transform-style: preserve-3d; /*由于perspective只能对子1层节点生效，因此想让子节点的子节点也服从这个3D变化，则需要设置这个属性*/
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:all 5s;
+}
+.panel:hover .panel-inner{
+    transform:rotateY(360deg);
+}
+.box{
+    width:200px;
+    height:100px;
+    background-color:#ccc;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-top:-50px;
+    margin-left:-100px;
+    transform:rotateY(45deg); /*按照Y轴3D旋转45度*/
+    box-sizing:border-box;
+    border:3px solid red;
+    opacity: 0.6;
+}
+.b1{
+    transform:rotateY(0deg)translateZ(240px); /*translateZ是让物体离开原点240px，否则，所有的3D变幻都会聚集在原点上*/
+}
+.b2{
+    transform:rotateY(60deg)translateZ(240px);
+}
+.b3{
+    transform:rotateY(120deg)translateZ(240px);
+}
+.b4{
+    transform:rotateY(180deg)translateZ(240px);
+}
+.b5{
+    transform:rotateY(240deg)translateZ(240px);
+}
+.b6{
+    transform:rotateY(300deg)translateZ(240px);
+}
+</style>
+</head>
+
+<body>
+    <div class="panel">
+        <div class="panel-inner">
+            <div class="box b1">1</div>
+            <div class="box b2">2</div>
+            <div class="box b3">3</div>
+            <div class="box b4">4</div>
+            <div class="box b5">5</div>
+            <div class="box b6">6</div>
+        </div>
+    </div>
+</body>
+</html>

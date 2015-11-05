@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test3D</title>
+<style type="text/css">
+.panel{
+    position:relative;
+    width:800px;
+    height:500px;
+    border:1px solid red;
+    margin:0 auto;
+    perspective:800px;
+    perspective-origin:50% 50%;
+    overflow:hidden;
+}
+.cube{
+    transform-style: preserve-3d;
+    position:absolute;
+    width:400px;
+    height:400px;
+    left:50%;
+    top:50%;
+    margin:-200px 0 0 -200px;
+    transition:all 1s;
+}
+.face{
+    width:200px;
+    height:200px;
+    background-color:#ccc;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin:-100px 0 0 -100px;
+    box-sizing:border-box;
+    border:3px solid #987a5a;
+    font-size:64px;
+    text-align:center;
+    line-height:200px;
+}
+.face:nth-child(1){
+    transform:rotateX(90deg) rotateY(0deg) translateZ(100px);
+    background-color:#e3cfcf;
+}
+.face:nth-child(2){
+    transform:rotateX(0deg) rotateY(90deg) translateZ(100px);
+    background-color:#e3cfe3;
+}
+.face:nth-child(3){
+    transform:rotateX(-90deg) rotateY(0deg) translateZ(100px);
+    background-color:#d2cfe3;
+}
+.face:nth-child(4){
+    transform:rotateX(0deg) rotateY(-90deg) translateZ(100px);
+    background-color:#cfe1e3;
+}
+.face:nth-child(5){
+    transform:rotateX(0deg) rotateY(0deg) translateZ(100px);
+    background-color:#cfe3d3;
+}
+.face:nth-child(6){
+    transform:rotateX(0deg) rotateY(180deg) translateZ(100px);
+    background-color:#e1e3cf;
+}
+
+.panel .cube.toA{transform:rotateX(-90deg) rotateY(0deg);}
+.panel .cube.toB{transform:rotateX(0deg) rotateY(-90deg);}
+.panel .cube.toC{transform:rotateX(90deg) rotateY(0deg);}
+.panel .cube.toD{transform:rotateX(0deg) rotateY(90deg);}
+.panel .cube.toE{transform:rotateX(0deg) rotateY(0deg);}
+.panel .cube.toF{transform:rotateX(0deg) rotateY(180deg);}
+</style>
+</head>
+
+<body>
+    <div class="panel">
+        <div class="cube" id="cube">
+            <div class="face">A</div>
+            <div class="face">B</div>
+            <div class="face">C</div>
+            <div class="face">D</div>
+            <div class="face">E</div>
+            <div class="face">F</div>
+        </div>
+    </div>
+    <div style="margin:0 auto; text-align:center;">
+        <button class="btn" id="A">to A</button>
+        <button class="btn" id="B">to B</button>
+        <button class="btn" id="C">to C</button>
+        <button class="btn" id="D">to D</button>
+        <button class="btn" id="E">to E</button>
+        <button class="btn" id="F">to F</button>
+    </div>
+<script type="text/javascript" src="jquery-1.11.0.js"></script>
+<script type="text/javascript">
+$(function (){
+    $('.btn').on('click', function (){
+        var $this = $(this);
+        var to = $this.attr('id');
+        var $cube = $('#cube');
+        $cube.removeClass('toA toB toC toD toE toF');
+        $cube.addClass('to' + to);
+        console.log(1);
+    });
+});
+</script>
+</body>
+</html>
