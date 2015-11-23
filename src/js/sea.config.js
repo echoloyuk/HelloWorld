@@ -24,5 +24,5 @@ seajs.config({
 		['.js', '.js?v=' + version],
 		['.css', '.css?v=' + version]
 	],
-	base: 'http://127.0.0.1:808/HelloWorld/'
+	base: './'
 })
