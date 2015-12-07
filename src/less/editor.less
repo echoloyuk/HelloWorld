@@ -7,7 +7,7 @@
 @info-bg:#dedede; //文本编辑器下方的状态栏的背景颜色
 @p-border:#414141; //预览与编辑器之间的边线颜色
 
-@font: "Consolas", "Courier New"; //textarea字体
+@font: "Consolas", "Courier New", "Microsoft YaHei"; //textarea字体
 
 @import "function.less"; //工具样式
 
@@ -49,10 +49,11 @@
                 height:60px;
                 width:100%;
                 line-height:60px;
-                font-size:2.6em;
+                font-size:24px;
                 background-color: @title-bg;
                 border:none;
                 outline: none;
+                font-family: @font;
             }
 
         }
@@ -106,10 +107,12 @@
                 height:100%;
                 background-color:@content-bg;
                 font-family:@font;
-                font-size:1.4em;
-                line-height:1.4em;
+                font-size:16px;
+                line-height:1.7em;
                 outline:none;
                 resize:none;
+                box-sizing:border-box;
+                padding-right:10px;
             }
         }
 
@@ -122,6 +125,7 @@
             line-height:30px;
             background-color:@info-bg;
             padding:0 20px;
+            font-size:12px;
         }
 
     }
