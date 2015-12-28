@@ -662,6 +662,17 @@ define(function (require, exports, module){
             return true;
         },
 
+        //将cache中的文本清除
+        clearContext: function (){
+            var _cache = this._cache;
+            if (!_cache){
+                return false;
+            }
+            _cache['HelloWorldTitle'] = null;
+            _cache['HelloWorldContent'] = null;
+            return true;
+        },
+
         //保存编辑器文本
         saveEditor: function (){
             var $target = this.$target,
@@ -682,7 +693,18 @@ define(function (require, exports, module){
                 str += '不能临时保存，保存失败';
             }
             $info.html(str);
-        }, 
+        },
+
+        clearEditor: function (){
+            var $target = this.$target,
+                $info = $('#hInfo', $target),
+                $title = $('#hTitle', $target),
+                $textarea = $('#hContent', $target);
+            this.clearContext();
+            $title.val('');
+            $textarea.val('');
+            $info.html('HelloWorld :)');
+        },
 
         //获取title
         getTitle: function (){
