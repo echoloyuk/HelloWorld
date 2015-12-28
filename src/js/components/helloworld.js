@@ -718,6 +718,11 @@ define(function (require, exports, module){
             var $target = this.$target;
             var $content = $('#hContent', $target);
             return $content.val();
+        },
+
+        //生成预览
+        toPreview: function (){
+            this._toPreview();
         }
     });
 
